@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { BrowserRouter, Switch, Route, Link, useParams } from 'react-router-dom';
+import { BrowserRouter, Switch, Route, Link, useParams, HashRouter } from 'react-router-dom';
 import { Jumbotron, Container, Button, ButtonToolbar, Navbar } from 'react-bootstrap';
 import Menu from './Menu';
 import Home from './pages/Home';
@@ -12,7 +12,7 @@ export default function App(): ReactElement {
   const About = () => <span>About</span>;
 
   return (
-    <BrowserRouter>
+    <HashRouter>
 
       <Menu></Menu>
       <Switch>
@@ -29,6 +29,6 @@ export default function App(): ReactElement {
   
 
       </Container> */}
-    </BrowserRouter>
+    </HashRouter>
   );
 };
