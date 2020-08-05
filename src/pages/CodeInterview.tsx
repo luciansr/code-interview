@@ -14,11 +14,14 @@ export default function CodeInterview(): ReactElement {
 
     const { interviewId } = useParams();
 
+    const receiveData = (code: string) => {
+        setCode(code);
+    }
+
     useEffect(() => {
         (async () => {
-            const connection = await CodeService.getConnection(interviewId)
+            const connection = await CodeService.getConnection(interviewId, receiveData)
 
-            connection.setReceiveMessage(setCode)
             setConnection(connection);
             setLoading(false)
         })();    
@@ -30,6 +33,8 @@ export default function CodeInterview(): ReactElement {
             connection.sendMessage(code);
         }
     }
+
+
 
     return (<>
         <Jumbotron>
