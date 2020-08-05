@@ -21,21 +21,21 @@ export class CodeService {
 
                 peer.on('connection', (conn) => {
                     // resolve(conn)
-                    console.log('connection')
+                    console.log('connection', conn)
                     resolve(new Connection(conn));
                 });
 
 
-                // peer.on('open', () => {
-                //     // resolve(new Connection(peer));
-                //     console.log(peer.id)
-                // });
+                peer.on('open', () => {
+                    // resolve(new Connection(peer));
+                    console.log(peer.id)
+                });
             } else {
                 const peer = new Peer();
                 var conn = peer.connect(id, {reliable: true});
-                // peer.on('open', () => {
-                //     console.log(peer.id)
-                // }); 
+                peer.on('open', () => {
+                    console.log(peer.id)
+                }); 
                 conn.on('open', () => {
                     resolve(new Connection(conn));
                 });           
