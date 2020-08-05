@@ -4,29 +4,40 @@ import CodeEditor from '../components/CodeEditor';
 
 import { useParams } from 'react-router-dom';
 
-import { CodeService } from '../services/CodeService';
+import { CodeService, Connection } from '../services/CodeService';
 
 export default function CodeInterview(): ReactElement {
     var [code, setCode] = useState<string>(``);
     var [loading, setLoading] = useState<boolean>(true);
+    var [connection, setConnection] = useState<Connection>();
+
 
     const { interviewId } = useParams();
 
     useEffect(() => {
-        if(CodeService.isItMyId(interviewId)) {
+        (async () => {
+            const connection = await CodeService.getConnection(interviewId)
 
-        } else {
-
-        }
+            connection.setReceiveMessage(setCode)
+            setConnection(connection);
+            setLoading(false)
+        })();    
     }, [interviewId])
+
+    const onChangeCode = (code: string) => {
+        setCode(code);
+        if(connection) {
+            connection.sendMessage(code);
+        }
+    }
 
     return (<>
         <Jumbotron>
             {!loading || (<><h1> Waiting connection ... </h1> <Spinner animation="border" /></>)}
             
-            <p>
-                <CodeEditor value={code} onChange={setCode} />
-            </p>
+
+                <CodeEditor value={code} onChange={onChangeCode} />
+
         </Jumbotron>
     </>);
 }

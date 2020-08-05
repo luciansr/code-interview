@@ -1,9 +1,10 @@
 import React, { useState, ReactElement, useEffect} from 'react'
+import * as ace from 'ace-builds'
 
 import AceEditor, { IAceOptions } from "react-ace";
 
 import "ace-builds/src-noconflict/mode-javascript";
-import "ace-builds/src-noconflict/mode-json";
+import "ace-builds/src-noconflict/theme-github";
 
 interface EditorProps {
     value: string
@@ -22,9 +23,11 @@ export default function CodeEditor(props: EditorProps): ReactElement<EditorProps
         <>
             <AceEditor
                 mode={"javascript"}
+                theme="github"
                 value={value}
                 debounceChangePeriod={600}
                 setOptions={{
+                    useWorker: false,
                     highlightActiveLine: true,
                     highlightSelectedWord: true,
                     showLineNumbers: true,
