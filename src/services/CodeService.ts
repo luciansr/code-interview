@@ -1,18 +1,26 @@
-import Peer from 'simple-peer';
+import Peer from 'peerjs';
 
 export class CodeService {
-
-    private async Test() {
-        
+    private static setMyId(id: string): void {
+        localStorage.setItem('my-id', id);
     }
 
-    static async GetNewCodeInterviewCode(): Promise<string> {
+    private static getMyId(): string {
+        return localStorage.getItem('my-id') || '';
+    }
+
+    public static isItMyId(id: string): boolean {
+        return CodeService.getMyId() === id;
+    }
+
+    static async getNewInterviewCode(): Promise<string> {
         return new Promise((resolve) => {
+            const peer = new Peer()
 
-            
-            var peer = new Peer();
-
-            resolve("asd")
+            peer.on('open', (id: string) => {
+                CodeService.setMyId(id);
+                resolve(id)
+            })
         })
-      }
+    }
 }

@@ -1,7 +1,7 @@
-import React, { ReactElement, useEffect, useState } from 'react';
-import { Jumbotron, Container, Button, ButtonToolbar, Navbar } from 'react-bootstrap';
+import React, { ReactElement } from 'react';
+import { Jumbotron, Button } from 'react-bootstrap';
 
-import { BrowserRouter, Switch, Route, Link, useParams, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 import { CodeService } from '../services/CodeService';
 
@@ -9,7 +9,7 @@ export default function Home(): ReactElement {
     let history = useHistory();
 
     const getCodeInterviewCode = async () => {
-        const code = await CodeService.GetNewCodeInterviewCode();
+        const code = await CodeService.getNewInterviewCode();
         history.push(`/c/${code}`);
     }
 

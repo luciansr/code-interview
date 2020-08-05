@@ -1,28 +1,31 @@
-import React, { ReactElement, useEffect, useState } from 'react';
-import { Jumbotron, Container, Button, ButtonToolbar, Navbar } from 'react-bootstrap';
+import React, { ReactElement, useState, useEffect } from 'react';
+import { Jumbotron, Spinner } from 'react-bootstrap';
+import CodeEditor from '../components/CodeEditor';
 
-import { BrowserRouter, Switch, Route, Link, useParams, useHistory } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import { CodeService } from '../services/CodeService';
 
 export default function CodeInterview(): ReactElement {
-    let history = useHistory();
+    var [code, setCode] = useState<string>(``);
+    var [loading, setLoading] = useState<boolean>(true);
+
     const { interviewId } = useParams();
 
-    const getCodeInterviewCode = async () => {
-        const code = await CodeService.GetNewCodeInterviewCode();
-        history.push(`/c/${code}`);
-    }
+    useEffect(() => {
+        if(CodeService.isItMyId(interviewId)) {
+
+        } else {
+
+        }
+    }, [interviewId])
 
     return (<>
         <Jumbotron>
-            <h1>Hello, world! Code Interview Id = {interviewId} </h1>
+            {!loading || (<><h1> Waiting connection ... </h1> <Spinner animation="border" /></>)}
+            
             <p>
-                This is a simple hero unit, a simple jumbotron-style component for calling
-                extra attention to featured content or information.
-            </p>
-            <p>
-                <Button variant="primary" onClick={getCodeInterviewCode}>New Code Interview</Button>
+                <CodeEditor value={code} onChange={setCode} />
             </p>
         </Jumbotron>
     </>);
