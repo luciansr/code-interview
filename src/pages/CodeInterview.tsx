@@ -22,7 +22,7 @@ export default function CodeInterview(): ReactElement {
 
     useEffect(() => {
         (async () => {
-            const connection = await CodeService.getConnection(interviewId, receiveData)
+            const connection = await CodeService.getConnection(interviewId)
 
             connection.onReceiveData((data) => {
                 receiveData(data);

@@ -13,7 +13,7 @@ export class CodeService {
         return CodeService.getMyId() === id;
     }
 
-    public static async getConnection(id: string, onReceiveMessage: (message: string) => void): Promise<Connection> {
+    public static async getConnection(id: string): Promise<Connection> {
         return new Promise(async (resolve) => {
 
             if (this.isItMyId(id)) {
@@ -61,7 +61,7 @@ export class CodeService {
                     // conn = c;
                     console.log("Connected to: " + c.peer);
                     // status.innerHTML = "Connected";
-                    resolve(new Connection(c, onReceiveMessage));
+                    resolve(new Connection(c));
                     // ready();
                 });
                 // peer.on('disconnected', function () {
@@ -128,7 +128,7 @@ export class CodeService {
                     conn.on('open', function () {
                         // status.innerHTML = "Connected to: " + conn.peer;
                         console.log("Connected to: " + conn.peer);
-                        resolve(new Connection(conn, onReceiveMessage));
+                        resolve(new Connection(conn));
                         // Check URL params for comamnds that should be sent immediately
                         // var command = getUrlParam("command");
                         // if (command)
@@ -207,17 +207,7 @@ export class CodeService {
 
 export class Connection {
     constructor(
-        private peerConnection: Peer.DataConnection,
-        private onReceiveMessage: (message: string) => void) {
-        this.init();
-    }
-
-    private init() {
-        // Receive messages
-        // this.peerConnection.on('data', (data) => {
-        //     console.log('Received', data);
-        //     this.onReceiveMessage(data);
-        // });
+        private peerConnection: Peer.DataConnection) {
     }
 
     public onReceiveData(onReceiveDataCallback: (message: string) => void) {
