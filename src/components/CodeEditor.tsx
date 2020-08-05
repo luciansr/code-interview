@@ -8,24 +8,24 @@ import "ace-builds/src-noconflict/theme-github";
 
 interface EditorProps {
     value: string
-    onChange?: (value: string) => void
+    onChange: (value: string) => void
 }
 
 export default function CodeEditor(props: EditorProps): ReactElement<EditorProps> {
 
-    const [value, setValue] = useState<string>(props.value)
+    // const [value, setValue] = useState<string>(props.value)
 
-    useEffect(() => {
-        props.onChange && props.onChange(value)
-    }, [value])
+    // useEffect(() => {
+    //     props.onChange && props.onChange(value)
+    // }, [value])
 
     return (
         <>
             <AceEditor
                 mode={"javascript"}
                 theme="github"
-                value={value}
-                debounceChangePeriod={600}
+                value={props.value}
+                // debounceChangePeriod={600}
                 setOptions={{
                     useWorker: false,
                     highlightActiveLine: true,
@@ -37,7 +37,7 @@ export default function CodeEditor(props: EditorProps): ReactElement<EditorProps
                     showGutter: true
                 }}
                 width={"auto"}
-                onChange={setValue}
+                onChange={props.onChange}
                 name="my_id"
                 editorProps={{
                     $blockScrolling: true,
