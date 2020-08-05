@@ -7,20 +7,26 @@ import { useParams } from 'react-router-dom';
 import { CodeService, Connection } from '../services/CodeService';
 
 export default function CodeInterview(): ReactElement {
-    var [code, setCode] = useState<string>(``);
-    var [loading, setLoading] = useState<boolean>(true);
-    var [connection, setConnection] = useState<Connection>();
+    const [html, setHtml] = useState<string>(``);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [connection, setConnection] = useState<Connection>();
 
 
     const { interviewId } = useParams();
 
     const receiveData = (code: string) => {
-        setCode(code);
+        console.log(html)
+        console.log(setHtml)
+        setHtml(code);
     }
 
     useEffect(() => {
         (async () => {
             const connection = await CodeService.getConnection(interviewId, receiveData)
+
+            connection.onReceiveData((data) => {
+                receiveData(data);
+            });
 
             setConnection(connection);
             setLoading(false)
@@ -28,7 +34,7 @@ export default function CodeInterview(): ReactElement {
     }, [interviewId])
 
     const onChangeCode = (code: string) => {
-        setCode(code);
+        setHtml(code);
         if(connection) {
             connection.sendMessage(code);
         }
@@ -41,7 +47,7 @@ export default function CodeInterview(): ReactElement {
             {!loading || (<><h1> Waiting connection ... </h1> <Spinner animation="border" /></>)}
             
 
-                <CodeEditor value={code} onChange={onChangeCode} />
+                <CodeEditor value={html} onChange={onChangeCode} />
 
         </Jumbotron>
     </>);

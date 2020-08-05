@@ -214,9 +214,17 @@ export class Connection {
 
     private init() {
         // Receive messages
+        // this.peerConnection.on('data', (data) => {
+        //     console.log('Received', data);
+        //     this.onReceiveMessage(data);
+        // });
+    }
+
+    public onReceiveData(onReceiveDataCallback: (message: string) => void) {
+        // Receive messages
         this.peerConnection.on('data', (data) => {
             console.log('Received', data);
-            this.onReceiveMessage(data);
+            onReceiveDataCallback(data);
         });
     }
 
