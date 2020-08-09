@@ -12,13 +12,6 @@ interface EditorProps {
 }
 
 export default function CodeEditor(props: EditorProps): ReactElement<EditorProps> {
-
-    // const [value, setValue] = useState<string>(props.value)
-
-    // useEffect(() => {
-    //     props.onChange && props.onChange(value)
-    // }, [value])
-
     return (
         <>
             <AceEditor
@@ -37,6 +30,7 @@ export default function CodeEditor(props: EditorProps): ReactElement<EditorProps
                     showGutter: true
                 }}
                 width={"auto"}
+                height={"70%"}
                 onChange={props.onChange}
                 name="my_id"
                 editorProps={{
