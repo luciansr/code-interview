@@ -1,4 +1,7 @@
 import Peer from 'peerjs';
+import { CodeClient } from './CodeClient';
+
+const codeClient = new CodeClient();
 
 export class MultipleConnectionService {
     private myId: string;
@@ -8,237 +11,157 @@ export class MultipleConnectionService {
         console.log(this.myId);
     }
 
-
-    private  setMyId(id: string): void {
-        sessionStorage.setItem('my-id', id);
-    }
-
-    private  getMyId(): string {
-        return sessionStorage.getItem('my-id') || '';
-    }
-
-    private  getMyLocalId(): string {
+    private getMyLocalId(): string {
         const key = `my-local-id`;
 
         const myId = sessionStorage.getItem(key);
-        if(myId) return myId;
+        if (myId) return myId;
 
-        const newId = this.NewGuid();
+        const newId = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+
         sessionStorage.setItem(key, newId);
 
         return newId;
     }
 
-    private  isItMyId(id: string): boolean {
-        return this.getMyId() === id;
-    }
-
-    public  async getConnection(id: string): Promise<MultipleConnection> {
-        return new Promise(async (resolve) => {
-
-            if (this.isItMyId(id)) {
-                // const peer = new Peer(id);
-
-                // peer.on('connection', (conn) => {
-                //     // resolve(conn)
-                //     console.log('connection', conn)
-                //     resolve(new Connection(conn));
-                // });
-
-
-                // peer.on('open', () => {
-                //     // resolve(new Connection(peer));
-                //     console.log(peer.id)
-                // });
-
-
-                const peer = new Peer(id, {
-                    debug: 2
-                });
-
-                peer.on('open', function (id) {
-                    // Workaround for peer.reconnect deleting previous id
-                    // if (peer.id === null) {
-                    //     console.log('Received null id from peer open');
-                    //     peer.id = lastPeerId;
-                    // } else {
-                    //     lastPeerId = peer.id;
-                    // }
-
-                    console.log("ID: " + peer.id);
-                    console.log("Awaiting connection...");
-                });
-                peer.on('connection', function (c) {
-                    // Allow only a single connection
-                    // if (conn && conn.open) {
-                    //     c.on('open', function() {
-                    //         c.send("Already connected to another client");
-                    //         setTimeout(function() { c.close(); }, 500);
-                    //     });
-                    //     return;
-                    // }
-
-                    // conn = c;
-                    console.log("Connected to: " + c.peer);
-                    // status.innerHTML = "Connected";
-                    resolve(new MultipleConnection(c));
-                    // ready();
-                });
-                // peer.on('disconnected', function () {
-                //     status.innerHTML = "Connection lost. Please reconnect";
-                //     console.log('Connection lost. Please reconnect');
-
-                //     // Workaround for peer.reconnect deleting previous id
-                //     peer.id = lastPeerId;
-                //     peer._lastServerId = lastPeerId;
-                //     peer.reconnect();
-                // });
-                peer.on('close', function () {
-                    // conn = null;
-                    // status.innerHTML = "Connection destroyed. Please refresh";
-                    console.log('Connection destroyed');
-                });
-                peer.on('error', function (err) {
-                    console.log(err);
-                    alert('' + err);
-                });
-
-
-            } else {
-                // const peer = new Peer();
-                const peer = new Peer(undefined, {
-                    debug: 2
-                });
-
-                peer.on('open', function (id) {
-                    // Workaround for peer.reconnect deleting previous id
-                    // if (peer.id === null) {
-                    //     console.log('Received null id from peer open');
-                    //     peer.id = lastPeerId;
-                    // } else {
-                    //     lastPeerId = peer.id;
-                    // }
-
-                    console.log('ID: ' + peer.id);
-
-
-
-
-                    // if (conn) {
-                    //     conn.close();
-                    // }
-
-                    // Create connection to destination peer specified in the input field
-
-
-                });
-                peer.on('connection', function (c) {
-                    // Disallow incoming connections
-                    c.on('open', function () {
-                        c.send("Sender does not accept incoming connections");
-                        setTimeout(function () { c.close(); }, 500);
-                    });
-                });
-
-                setTimeout(() => {
-                    const conn = peer.connect(id, {
-                        // reliable: true
-                    });
-
-                    conn.on('open', function () {
-                        // status.innerHTML = "Connected to: " + conn.peer;
-                        console.log("Connected to: " + conn.peer);
-                        resolve(new MultipleConnection(conn));
-                        // Check URL params for comamnds that should be sent immediately
-                        // var command = getUrlParam("command");
-                        // if (command)
-                        //     conn.send(command);
-                    });
-                    // Handle incoming data (messages only since this is the signal sender)
-                    // conn.on('data', function (data) {
-                    //     // addMessage("<span class=\"peerMsg\">Peer:</span> " + data);
-                    // });
-                    conn.on('close', function () {
-                        console.log("Connection closed");
-                    });
-                }, 3000);
-
-
-                // peer.on('disconnected', function () {
-                //     // status.innerHTML = "Connection lost. Please reconnect";
-                //     console.log('Connection lost. Please reconnect');
-
-                //     // Workaround for peer.reconnect deleting previous id
-                //     // peer.id = lastPeerId;
-                //     // peer._lastServerId = lastPeerId;
-                //     peer.reconnect();
-                // });
-                peer.on('close', function () {
-                    // conn = null;
-                    // status.innerHTML = "Connection destroyed. Please refresh";
-                    console.log('Connection destroyed');
-                });
-                peer.on('error', function (err) {
-                    console.log(err);
-                    alert('' + err);
-                });
-            }
-        })
-    }
-
-
-    private NewGuid(): string {
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-            return v.toString(16);
-        });
+    public getConnection(workspaceId: string): MultipleConnection {
+        return new MultipleConnection(this.getMyLocalId(), workspaceId)
     }
 
     public async getNewInterviewCode(): Promise<string> {
-
-
-
-        return new Promise((resolve) => {
-            const id = this.NewGuid();
-            // const peer = new Peer()
-
-            // peer.on('open', (id: string) => {
-            this.setMyId(id);
-            resolve(id)
-            // })
+        const workspace = await codeClient.CreateWorkspace({
+            connectionId: "init",
+            userId: this.getMyLocalId()
         })
+
+        return workspace.id;
     }
-
-
-    // public static async getNewInterviewCode(): Promise<string> {
-
-
-
-    //     return new Promise((resolve) => {
-    //         const peer = new Peer()
-
-    //         peer.on('open', (id: string) => {
-    //             CodeService.setMyId(id);
-    //             resolve(id)
-    //         })
-    //     })
-    // }
 }
 
+
+interface ConnectionState {
+    connection: Peer.DataConnection;
+    onDataInitialized: boolean
+}
+
+interface ConnectionDictionary {
+    [id: string]: ConnectionState
+}
+
+
+
 export class MultipleConnection {
+    private peer: Peer;
+    private peerConnections: ConnectionDictionary = {};
+    private codeClient: CodeClient;
+    private onReceiveDataCallback?: (message: string) => void;
+
     constructor(
-        private peerConnection: Peer.DataConnection) {
+        private localId: string,
+        private workspaceId: string) {
+        this.codeClient = new CodeClient();
+        this.peer = new Peer();
+        this.InitializePeer()
     }
 
-    public onReceiveData(onReceiveDataCallback: (message: string) => void) {
-        // Receive messages
-        this.peerConnection.on('data', (data) => {
-            console.log('Received', data);
-            onReceiveDataCallback(data);
+    private async InitializePeer() {
+
+        this.peer.on('open', async (id) => {
+            console.log("ID: " + this.peer.id);
+            console.log("Awaiting connection...");
+            await this.ConnectToAllUsers(id);
+        });
+        this.peer.on('connection', (newConnection) => {
+            console.log("Connected to: " + newConnection.peer);
+            this.AddConnection(newConnection);
+        });
+        this.peer.on('disconnected', () => {
+            // status.innerHTML = "Connection lost. Please reconnect";
+            console.log('Connection lost. Please reconnect');
+
+            // Workaround for peer.reconnect deleting previous id
+            // peer.id = lastPeerId;
+            // peer._lastServerId = lastPeerId;
+            this.peer.reconnect();
+        });
+        this.peer.on('close', function () {
+            // conn = null;
+            // status.innerHTML = "Connection destroyed. Please refresh";
+            console.log('Connection destroyed');
+        });
+        this.peer.on('error', function (err) {
+            console.log(err);
+            alert('' + err);
         });
     }
 
+    private AddConnection(newConnection: Peer.DataConnection) {
+        this.peerConnections[newConnection.peer] = {
+            connection: newConnection,
+            onDataInitialized: false
+        }
+
+        this.InitializeDataConnection(this.peerConnections[newConnection.peer]);
+    }
+
+    private InitializeDataConnection(connectionState: ConnectionState) {
+        if (this.onReceiveDataCallback && !connectionState.onDataInitialized) {
+            connectionState.connection.on('data', (data) => {
+                console.log('Received', data);
+                this.ExecuteOnReceiveData(data);
+            })
+
+            connectionState.onDataInitialized = true;
+        }
+    }
+
+    private ExecuteOnReceiveData(data: string) {
+        if (this.onReceiveDataCallback) {
+            this.onReceiveDataCallback(data);
+        }
+    }
+
+    private async ConnectToAllUsers(connectionId: string) {
+        const workspaceState = await this.codeClient.UpdateWorkspace({
+            connectionId: connectionId,
+            userId: this.localId,
+            workspaceId: this.workspaceId,
+        })
+
+        for (const id in workspaceState.users) {
+            if (id === this.localId) continue;
+
+            const user = workspaceState.users[id];
+
+            const connection = this.peer.connect(user.connectionId);
+            connection.on('open', () => {
+                console.log("Connected to: " + connection.peer);
+            });
+
+            connection.on('close', function () {
+                console.log("Connection closed");
+            });
+
+            this.AddConnection(connection);
+        }
+    }
+
+    public onReceiveData(onReceiveDataCallback: (message: string) => void) {
+        this.onReceiveDataCallback = onReceiveDataCallback;
+
+        for (var id in this.peerConnections) {
+            const connectionState = this.peerConnections[id];
+            this.InitializeDataConnection(connectionState);
+        }
+    }
+
     public sendMessage(message: string): void {
-        this.peerConnection.send(message)
+        for (var id in this.peerConnections) {
+            const peerConnection = this.peerConnections[id].connection;
+            peerConnection.send(message);
+        }
     }
 }

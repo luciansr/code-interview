@@ -25,7 +25,7 @@ interface UsersDictionary {
 export class CodeClient {
     private static url: string = process.env.REACT_APP_BACKEND ?? `http://localhost:5000`;
 
-    static async CreateWorkspace(userConnection: UserConnection): Promise<CodeWorkspace> {
+    public async CreateWorkspace(userConnection: UserConnection): Promise<CodeWorkspace> {
         const response = await fetch(
             `${CodeClient.url}/api/workspace/create`,
             {
@@ -39,7 +39,7 @@ export class CodeClient {
         return await response.json()
     }
 
-    static async UpdateWorkspace(workspaceUserConnection: WorkspaceUserConnection): Promise<CodeWorkspace> {
+    public async UpdateWorkspace(workspaceUserConnection: WorkspaceUserConnection): Promise<CodeWorkspace> {
         const response = await fetch(
             `${CodeClient.url}/api/workspace/update`,
             {
