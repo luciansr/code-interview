@@ -13,6 +13,8 @@ export default function Home(): ReactElement {
         history.push(`/c/${code}`);
     }
 
+    getCodeInterviewCode()
+
     return (<>
         <Jumbotron>
             <h1>Hello, world!</h1>

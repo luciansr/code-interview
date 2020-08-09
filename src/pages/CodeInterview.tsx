@@ -42,8 +42,6 @@ export default function CodeInterview(): ReactElement {
         }
     }
 
-
-
     return (<>
         <Jumbotron>
             {!loading || (<><h1> Waiting connection ... </h1> <Spinner animation="border" /></>)}
