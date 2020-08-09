@@ -1,11 +1,11 @@
 import Peer from 'peerjs';
 
 export class MultipleConnectionService {
-    private myId: string = this.getMyId();
+    private myId: string;
 
     constructor() {
-        
-        
+        this.myId = this.getMyLocalId();
+        console.log(this.myId);
     }
 
 
