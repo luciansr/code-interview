@@ -23,7 +23,6 @@ export default function CodeInterview(): ReactElement {
 
 
     useEffect(() => {
-        // setHtml(`nao eh o felitche`)
         (async () => {
             const connection = await CodeService.getConnection(interviewId)
 
