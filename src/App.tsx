@@ -1,19 +1,15 @@
 import React, { ReactElement } from 'react';
-import { BrowserRouter, Switch, Route, Link, useParams, HashRouter } from 'react-router-dom';
-import { Jumbotron, Container, Button, ButtonToolbar, Navbar } from 'react-bootstrap';
+import { Switch, Route, HashRouter } from 'react-router-dom';
 import Menu from './Menu';
-import Home from './pages/Home';
-import CodeInterview from './pages/CodeInterview';
+
+import { Home, CodeInterview, MultipleCodeInterview } from './pages';
 
 import './App.css';
 
 export default function App(): ReactElement {
 
-  const About = () => <span>About</span>;
-
   return (
     <HashRouter>
-
       <Menu></Menu>
       <Switch>
         <Route exact path="/">
@@ -22,13 +18,10 @@ export default function App(): ReactElement {
         <Route path="/c/:interviewId">
           <CodeInterview />
         </Route>
+        <Route path="/mc/:interviewId">
+          <MultipleCodeInterview />
+        </Route>
       </Switch>
-
-      {/* <Container >
-
-  
-
-      </Container> */}
     </HashRouter>
   );
 };
