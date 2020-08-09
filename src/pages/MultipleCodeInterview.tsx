@@ -4,7 +4,7 @@ import CodeEditor from '../components/CodeEditor';
 
 import { useParams } from 'react-router-dom';
 
-import { CodeService, Connection } from '../services/CodeService';
+import { CodeService, Connection } from '../services';
 
 export default function MultipleCodeInterview(): ReactElement {
     const [html, setHtml] = useState<string>(`1`);
