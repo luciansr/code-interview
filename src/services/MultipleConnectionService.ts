@@ -1,19 +1,39 @@
 import Peer from 'peerjs';
 
 export class MultipleConnectionService {
-    private static setMyId(id: string): void {
+    private myId: string = this.getMyId();
+
+    constructor() {
+        
+        
+    }
+
+
+    private  setMyId(id: string): void {
         sessionStorage.setItem('my-id', id);
     }
 
-    private static getMyId(): string {
+    private  getMyId(): string {
         return sessionStorage.getItem('my-id') || '';
     }
 
-    private static isItMyId(id: string): boolean {
-        return MultipleConnectionService.getMyId() === id;
+    private  getMyLocalId(): string {
+        const key = `my-local-id`;
+
+        const myId = sessionStorage.getItem(key);
+        if(myId) return myId;
+
+        const newId = this.NewGuid();
+        sessionStorage.setItem(key, newId);
+
+        return newId;
     }
 
-    public static async getConnection(id: string): Promise<Connection> {
+    private  isItMyId(id: string): boolean {
+        return this.getMyId() === id;
+    }
+
+    public  async getConnection(id: string): Promise<MultipleConnection> {
         return new Promise(async (resolve) => {
 
             if (this.isItMyId(id)) {
@@ -61,7 +81,7 @@ export class MultipleConnectionService {
                     // conn = c;
                     console.log("Connected to: " + c.peer);
                     // status.innerHTML = "Connected";
-                    resolve(new Connection(c));
+                    resolve(new MultipleConnection(c));
                     // ready();
                 });
                 // peer.on('disconnected', function () {
@@ -128,7 +148,7 @@ export class MultipleConnectionService {
                     conn.on('open', function () {
                         // status.innerHTML = "Connected to: " + conn.peer;
                         console.log("Connected to: " + conn.peer);
-                        resolve(new Connection(conn));
+                        resolve(new MultipleConnection(conn));
                         // Check URL params for comamnds that should be sent immediately
                         // var command = getUrlParam("command");
                         // if (command)
@@ -167,23 +187,23 @@ export class MultipleConnectionService {
     }
 
 
-    private static uuidv4(): string {
+    private NewGuid(): string {
         return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
             var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
             return v.toString(16);
         });
     }
 
-    public static async getNewInterviewCode(): Promise<string> {
+    public async getNewInterviewCode(): Promise<string> {
 
 
 
         return new Promise((resolve) => {
-            const id = this.uuidv4();
+            const id = this.NewGuid();
             // const peer = new Peer()
 
             // peer.on('open', (id: string) => {
-            MultipleConnectionService.setMyId(id);
+            this.setMyId(id);
             resolve(id)
             // })
         })
@@ -205,7 +225,7 @@ export class MultipleConnectionService {
     // }
 }
 
-export class Connection {
+export class MultipleConnection {
     constructor(
         private peerConnection: Peer.DataConnection) {
     }

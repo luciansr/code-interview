@@ -5,12 +5,13 @@ import Menu from '../components/Menu';
 
 import { useParams } from 'react-router-dom';
 
-import { CodeService, Connection } from '../services';
+import { MultipleConnectionService, MultipleConnection } from '../services';
+const connectionService = new MultipleConnectionService();
 
 export default function MultipleCodeInterview(): ReactElement {
     const [html, setHtml] = useState<string>(`1`);
     const [loading, setLoading] = useState<boolean>(true);
-    const [connection, setConnection] = useState<Connection>();
+    const [connection, setConnection] = useState<MultipleConnection>();
 
 
     const { interviewId } = useParams();
@@ -25,7 +26,7 @@ export default function MultipleCodeInterview(): ReactElement {
     useEffect(() => {
         // setHtml(`nao eh o felitche`)
         (async () => {
-            const connection = await CodeService.getConnection(interviewId)
+            const connection = await connectionService.getConnection(interviewId)
 
             connection.onReceiveData((data) => {
                 receiveData(data);
