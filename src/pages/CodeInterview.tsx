@@ -1,6 +1,7 @@
 import React, { ReactElement, useState, useEffect } from 'react';
 import { Jumbotron, Spinner } from 'react-bootstrap';
 import CodeEditor from '../components/CodeEditor';
+import Menu from '../components/Menu';
 
 import { useParams } from 'react-router-dom';
 
@@ -43,6 +44,7 @@ export default function CodeInterview(): ReactElement {
     }
 
     return (<>
+        <Menu/>
         <Jumbotron>
             {!loading || (<><h1> Waiting connection ... </h1> <Spinner animation="border" /></>)}
             <CodeEditor value={html} onChange={onChangeCode} />
