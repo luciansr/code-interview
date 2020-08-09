@@ -6,7 +6,11 @@ import Menu from '../components/Menu';
 import { useParams } from 'react-router-dom';
 
 import { MultipleConnectionService, MultipleConnection } from '../services';
+
+import './MultipleCodeInterview.css'
+
 const connectionService = new MultipleConnectionService();
+
 
 export default function MultipleCodeInterview(): ReactElement {
     const [html, setHtml] = useState<string>(`1`);
@@ -24,7 +28,6 @@ export default function MultipleCodeInterview(): ReactElement {
 
 
     useEffect(() => {
-        // setHtml(`nao eh o felitche`)
         (async () => {
             const connection = await connectionService.getConnection(interviewId)
 
