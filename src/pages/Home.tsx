@@ -1,5 +1,6 @@
 import React, { ReactElement } from 'react';
 import { Jumbotron, Button } from 'react-bootstrap';
+import Menu from '../components/Menu';
 
 import { useHistory } from 'react-router-dom';
 
@@ -10,10 +11,13 @@ export default function Home(): ReactElement {
 
     const getCodeInterviewCode = async () => {
         const code = await CodeService.getNewInterviewCode();
-        history.push(`/c/${code}`);
+        history.push(`/mc/${code}`);
     }
 
+    getCodeInterviewCode()
+
     return (<>
+        <Menu/>
         <Jumbotron>
             <h1>Hello, world!</h1>
             <p>

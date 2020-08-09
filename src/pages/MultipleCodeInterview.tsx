@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom';
 
 import { CodeService, Connection } from '../services';
 
-export default function CodeInterview(): ReactElement {
+export default function MultipleCodeInterview(): ReactElement {
     const [html, setHtml] = useState<string>(`1`);
     const [loading, setLoading] = useState<boolean>(true);
     const [connection, setConnection] = useState<Connection>();
