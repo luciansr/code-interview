@@ -27,8 +27,8 @@ export class MultipleConnectionService {
         return newId;
     }
 
-    public getConnection(workspaceId: string): MultipleConnection {
-        return new MultipleConnection(this.getMyLocalId(), workspaceId)
+    public getConnection(workspaceId: string, onReceiveDataCallback: (message: string) => void): MultipleConnection {
+        return new MultipleConnection(this.getMyLocalId(), workspaceId, onReceiveDataCallback)
     }
 
     public async getNewInterviewCode(): Promise<string> {
@@ -57,11 +57,11 @@ export class MultipleConnection {
     private peer: Peer;
     private peerConnections: ConnectionDictionary = {};
     private codeClient: CodeClient;
-    private onReceiveDataCallback?: (message: string) => void;
 
     constructor(
         private localId: string,
-        private workspaceId: string) {
+        private workspaceId: string,
+        private onReceiveDataCallback: (message: string) => void) {
         this.codeClient = new CodeClient();
         this.peer = new Peer();
         this.InitializePeer()
@@ -108,19 +108,13 @@ export class MultipleConnection {
     }
 
     private InitializeDataConnection(connectionState: ConnectionState) {
-        if (this.onReceiveDataCallback && !connectionState.onDataInitialized) {
+        if (!connectionState.onDataInitialized) {
             connectionState.connection.on('data', (data) => {
                 console.log('Received', data);
-                this.ExecuteOnReceiveData(data);
+                this.onReceiveDataCallback(data);
             })
 
             connectionState.onDataInitialized = true;
-        }
-    }
-
-    private ExecuteOnReceiveData(data: string) {
-        if (this.onReceiveDataCallback) {
-            this.onReceiveDataCallback(data);
         }
     }
 
@@ -146,15 +140,6 @@ export class MultipleConnection {
             });
 
             this.AddConnection(connection);
-        }
-    }
-
-    public onReceiveData(onReceiveDataCallback: (message: string) => void) {
-        this.onReceiveDataCallback = onReceiveDataCallback;
-
-        for (var id in this.peerConnections) {
-            const connectionState = this.peerConnections[id];
-            this.InitializeDataConnection(connectionState);
         }
     }
 

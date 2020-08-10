@@ -29,11 +29,7 @@ export default function MultipleCodeInterview(): ReactElement {
 
     useEffect(() => {
         (async () => {
-            const connection = await connectionService.getConnection(interviewId)
-
-            connection.onReceiveData((data) => {
-                receiveData(data);
-            });
+            const connection = await connectionService.getConnection(interviewId, receiveData)
 
             setConnection(connection);
             setLoading(false)
