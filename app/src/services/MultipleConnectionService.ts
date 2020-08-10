@@ -27,7 +27,7 @@ export class MultipleConnectionService {
         return newId;
     }
 
-    public getConnection(workspaceId: string, onReceiveDataCallback: (message: string) => void): MultipleConnection {
+    public getConnection(workspaceId: string, onReceiveDataCallback: (message: CustomDataMessage) => void): MultipleConnection {
         return new MultipleConnection(this.getMyLocalId(), workspaceId, onReceiveDataCallback)
     }
 
@@ -51,7 +51,16 @@ interface ConnectionDictionary {
     [id: string]: ConnectionState
 }
 
+export enum MessageType {
+    Code,
+    Chat,
+    RequestUpdate
+}
 
+export interface CustomDataMessage {
+    type: MessageType;
+    data: string;
+}
 
 export class MultipleConnection {
     private peer: Peer;
@@ -61,7 +70,7 @@ export class MultipleConnection {
     constructor(
         private localId: string,
         private workspaceId: string,
-        private onReceiveDataCallback: (message: string) => void) {
+        private onReceiveDataCallback: (message: CustomDataMessage) => void) {
         this.codeClient = new CodeClient();
         this.peer = new Peer();
         this.InitializePeer()
@@ -143,7 +152,7 @@ export class MultipleConnection {
         }
     }
 
-    public sendMessage(message: string): void {
+    public SendMessage(message: CustomDataMessage): void {
         for (var id in this.peerConnections) {
             const peerConnection = this.peerConnections[id].connection;
             peerConnection.send(message);
