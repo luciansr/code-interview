@@ -27,7 +27,7 @@ export class MultipleConnectionService {
         return newId;
     }
 
-    public getConnection(workspaceId: string, onReceiveDataCallback: (message: CustomDataMessage) => void): MultipleConnection {
+    public getConnection(workspaceId: string, onReceiveDataCallback: (message: DataMessage) => void): MultipleConnection {
         return new MultipleConnection(this.getMyLocalId(), workspaceId, onReceiveDataCallback)
     }
 
@@ -51,13 +51,40 @@ interface ConnectionDictionary {
     [id: string]: ConnectionState
 }
 
+
+// export enum MessageType {
+//     Code,
+//     Chat,
+//     RequestUpdate
+// }
+
+// export enum DestinationType {
+//     All,
+//     Single
+// }
+
+// export interface Destination {
+//     type: DestinationType
+//     connectionId: string
+// }
+
+// export interface Message {
+//     type: MessageType
+//     data: string
+// }
+
+// export interface DataMessage {
+//     destination: Destination
+//     data: Message
+// }
+
 export enum MessageType {
     Code,
     Chat,
     RequestUpdate
 }
 
-export interface CustomDataMessage {
+export interface DataMessage {
     type: MessageType;
     data: string;
 }
@@ -70,7 +97,7 @@ export class MultipleConnection {
     constructor(
         private localId: string,
         private workspaceId: string,
-        private onReceiveDataCallback: (message: CustomDataMessage) => void) {
+        private onReceiveDataCallback: (message: DataMessage) => void) {
         this.codeClient = new CodeClient();
         this.peer = new Peer();
         this.InitializePeer()
@@ -81,7 +108,7 @@ export class MultipleConnection {
         this.peer.on('open', async (id) => {
             console.log("ID: " + this.peer.id);
             console.log("Awaiting connection...");
-            await this.ConnectToAllUsers(id);
+            await this.ConnectToAllUsers(id, true);
         });
         this.peer.on('connection', (newConnection) => {
             console.log("Connected to: " + newConnection.peer);
@@ -127,7 +154,7 @@ export class MultipleConnection {
         }
     }
 
-    private async ConnectToAllUsers(connectionId: string) {
+    private async ConnectToAllUsers(connectionId: string, requestCode: boolean) {
         const workspaceState = await this.codeClient.UpdateWorkspace({
             connectionId: connectionId,
             userId: this.localId,
@@ -142,6 +169,16 @@ export class MultipleConnection {
             const connection = this.peer.connect(user.connectionId);
             connection.on('open', () => {
                 console.log("Connected to: " + connection.peer);
+                if(requestCode) {
+                    setTimeout(() => {
+                        connection.send({
+                            type: MessageType.RequestUpdate,
+                            data: this.localId
+                        })
+                    }, 3000)
+                    
+                    requestCode = false
+                }
             });
 
             connection.on('close', function () {
@@ -152,10 +189,14 @@ export class MultipleConnection {
         }
     }
 
-    public SendMessage(message: CustomDataMessage): void {
+    public SendMessage(message: DataMessage): void {
         for (var id in this.peerConnections) {
             const peerConnection = this.peerConnections[id].connection;
             peerConnection.send(message);
         }
+    }
+
+    public SendMessageToUser(userId: string, message: DataMessage): void {
+        this.peerConnections[userId].connection.send(message);
     }
 }

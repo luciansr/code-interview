@@ -24,6 +24,18 @@ export default function MultipleCodeInterview(): ReactElement {
         switch(message.type) {
             case MessageType.Code:
                 receiveCode(message.data)
+            case MessageType.RequestUpdate:
+                sendMessageToUser(message.data, {
+                    type: MessageType.Code,
+                    data: html
+                })                
+        }
+    }
+
+
+    const sendMessageToUser = (user: string, message: CustomDataMessage) => {
+        if(connection) {
+            connection.SendMessageToUser(message.data, message)
         }
     }
 

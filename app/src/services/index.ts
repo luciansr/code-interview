@@ -1,6 +1,6 @@
 import { CodeClient } from './CodeClient';
 import { CodeService, Connection } from './CodeService';
-import { MultipleConnectionService, MultipleConnection, MessageType, CustomDataMessage } from './MultipleConnectionService';
+import { MultipleConnectionService, MultipleConnection, MessageType, DataMessage } from './MultipleConnectionService';
 
 export {
     CodeClient,
@@ -10,4 +10,4 @@ export {
     MultipleConnection,
     MessageType
 };
-export type { CustomDataMessage };
+export type { DataMessage as CustomDataMessage };
