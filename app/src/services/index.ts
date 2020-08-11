@@ -10,4 +10,4 @@ export {
     MultipleConnection,
     MessageType
 };
-export type { DataMessage as CustomDataMessage };
+export type { DataMessage };

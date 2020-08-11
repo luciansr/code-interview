@@ -5,7 +5,7 @@ import Menu from '../components/Menu';
 
 import { useParams } from 'react-router-dom';
 
-import { MultipleConnectionService, MultipleConnection, MessageType, CustomDataMessage } from '../services';
+import { MultipleConnectionService, MultipleConnection, MessageType, DataMessage } from '../services';
 
 import './MultipleCodeInterview.css'
 
@@ -20,25 +20,6 @@ export default function MultipleCodeInterview(): ReactElement {
 
     const { interviewId } = useParams();
 
-    const receiveMessage = (message: CustomDataMessage) => {
-        switch(message.type) {
-            case MessageType.Code:
-                receiveCode(message.data)
-            case MessageType.RequestUpdate:
-                sendMessageToUser(message.data, {
-                    type: MessageType.Code,
-                    data: html
-                })                
-        }
-    }
-
-
-    const sendMessageToUser = (user: string, message: CustomDataMessage) => {
-        if(connection) {
-            connection.SendMessageToUser(message.data, message)
-        }
-    }
-
     const receiveCode = (code: string) => {
         console.log(html)
         console.log(setHtml)
@@ -48,7 +29,9 @@ export default function MultipleCodeInterview(): ReactElement {
 
     useEffect(() => {
         (async () => {
-            const connection = await connectionService.getConnection(interviewId, receiveMessage)
+            const connection = await connectionService.getConnection(interviewId, {
+                receiveCodeUpdate: receiveCode
+            })
 
             setConnection(connection);
             setLoading(false)
