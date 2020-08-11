@@ -27,8 +27,8 @@ export class MultipleConnectionService {
         return newId;
     }
 
-    public getConnection(workspaceId: string, messageCallbacks: DataMessageCallbacks): MultipleConnection {
-        return new MultipleConnection(this.getMyLocalId(), workspaceId, messageCallbacks)
+    public getConnection(workspaceId: string, messageCallbacks: DataMessageCallbacks): CommunicationManager {
+        return new CommunicationManager(this.getMyLocalId(), workspaceId, messageCallbacks)
     }
 
     public async getNewInterviewCode(): Promise<string> {
@@ -93,7 +93,7 @@ export interface DataMessage {
     data: string;
 }
 
-export class MultipleConnection {
+class MultipleConnection {
     private peer: Peer;
     private peerConnections: ConnectionDictionary = {};
     private codeClient: CodeClient;
@@ -102,7 +102,9 @@ export class MultipleConnection {
     constructor(
         private localId: string,
         private workspaceId: string,
-        private messageCallbacks: DataMessageCallbacks) {
+        private receiveMessageCallback: (message: DataMessage) => void,
+        private onConnectCallback: (myConnectionId: string) => void,
+        private onConnectWithUserCallback: (userConnectionId: string) => void) {
         this.codeClient = new CodeClient();
         this.peer = new Peer();
         this.InitializePeer()
@@ -113,6 +115,7 @@ export class MultipleConnection {
         this.peer.on('open', async (id) => {
             console.log("ID: " + this.peer.id);
             console.log("Awaiting connection...");
+            this.onConnectCallback(this.peer.id)
             await this.ConnectToAllUsers(id);
         });
         this.peer.on('connection', (newConnection) => {
@@ -151,7 +154,7 @@ export class MultipleConnection {
     private InitializeDataConnection(connectionState: ConnectionState) {
         if (!connectionState.onDataInitialized) {
             connectionState.connection.on('data', (data: DataMessage) => {
-                this.ReceiveMessage(data)
+                this.receiveMessageCallback(data)
             })
 
             connectionState.onDataInitialized = true;
@@ -165,8 +168,6 @@ export class MultipleConnection {
             workspaceId: this.workspaceId,
         })
 
-        let requestUpdate = true;
-
         for (const id in workspaceState.users) {
             if (id === this.localId) continue;
 
@@ -175,15 +176,7 @@ export class MultipleConnection {
             const connection = this.peer.connect(user.connectionId);
             connection.on('open', () => {
                 console.log("Connected to: " + connection.peer);
-                if (requestUpdate) {
-                    // setTimeout(() => {
-                        connection.send({
-                            type: MessageType.RequestUpdate,
-                            data: connectionId
-                        })
-                        requestUpdate = false
-                    // }, 3000)
-                }
+                this.onConnectWithUserCallback(connection.peer)
             });
 
             connection.on('close', function () {
@@ -195,7 +188,7 @@ export class MultipleConnection {
     }
 
     public SendMessage(message: DataMessage): void {
-        if(message.type == MessageType.Code) {
+        if (message.type == MessageType.Code) {
             this.code = message.data;
         }
 
@@ -205,8 +198,46 @@ export class MultipleConnection {
         }
     }
 
-    public SendMessageToUser(userId: string, message: DataMessage): void {
-        this.peerConnections[userId].connection.send(message);
+    public SendMessageToUser(userConnectionId: string, message: DataMessage): void {
+        this.peerConnections[userConnectionId].connection.send(message);
+    }
+}
+
+export class CommunicationManager {
+
+    private myConnectionId?: string
+    private code: string = ``
+    private alreadyRequestedInitialState: boolean = false
+    private connection: MultipleConnection
+
+    constructor(
+        private localId: string,
+        private workspaceId: string,
+        private messageCallbacks: DataMessageCallbacks) {
+        this.connection = new MultipleConnection(localId, workspaceId, 
+            (message: DataMessage) => this.ReceiveMessage(message),
+            (myConnectionId: string) => this.OnConnect(myConnectionId),
+            (userConnectionId: string) => this.OnConnectToUser(userConnectionId))
+    }
+
+    private OnConnect(myConnectionId: string) {
+        console.log(`Service: connected with id ${myConnectionId}`)
+        this.myConnectionId = myConnectionId;
+    }
+
+    private OnConnectToUser(userConnectionId: string) {
+        console.log(`Service: connected with user id ${userConnectionId}`)
+        if (this.code.length === 0 && !this.alreadyRequestedInitialState) {
+            this.RequestStateUpdateToUser(userConnectionId)
+            this.alreadyRequestedInitialState = true;
+        }
+    }
+
+    private RequestStateUpdateToUser(userConnectionId: string) {
+        this.connection.SendMessageToUser(userConnectionId, {
+            data: this.myConnectionId || ``,
+            type: MessageType.RequestUpdate
+        })
     }
 
     private ReceiveMessage(message: DataMessage) {
@@ -217,31 +248,23 @@ export class MultipleConnection {
                 this.messageCallbacks.receiveCodeUpdate(message.data);
                 break;
             case MessageType.RequestUpdate:
-                this.SendMessageToUser(message.data, {
-                    type: MessageType.Code,
-                    data: this.code
-                })
+                this.SendCodeUpdateToUser(message.data)
                 break;
         }
     }
+
+    public SendCodeUpdateToUser(userConnectionId: string): void {
+        this.connection.SendMessageToUser(userConnectionId, {
+            type: MessageType.Code,
+            data: this.code
+        })
+    }
+
+    public SendCodeUpdate(code: string): void {
+        this.code = code;
+        this.connection.SendMessage({
+            data: code,
+            type: MessageType.Code
+        })
+    }
 }
-
-// export class ConnectionService {
-
-//     private code: string = ``;
-
-//     constructor(
-//         private connection: MultipleConnection,
-//         private messageCallbacks: DataMessageCallbacks) {
-//     }
-
-//     private ReceiveMessage(message: DataMessage) {
-//         switch (message.type) {
-//             case MessageType.Code:
-//                 console.log('Received', message.data);
-//                 this.messageCallbacks.receiveCodeUpdate(message.data);
-//             case MessageType.RequestUpdate:
-//             // this.SendMessageToUser(message.data, message)                
-//         }
-//     }
-// }
