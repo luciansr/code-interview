@@ -5,7 +5,7 @@ import Menu from '../components/Menu';
 
 import { useParams } from 'react-router-dom';
 
-import { CodeService, Connection } from '../services';
+import { CodeService, Connection } from '../services/CodeService';
 
 export default function CodeInterview(): ReactElement {
     const [html, setHtml] = useState<string>(`1`);

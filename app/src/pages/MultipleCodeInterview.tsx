@@ -13,10 +13,9 @@ const connectionService = new MultipleConnectionService();
 
 
 export default function MultipleCodeInterview(): ReactElement {
-    const [html, setHtml] = useState<string>(`1`);
+    const [html, setHtml] = useState<string>(``);
     const [loading, setLoading] = useState<boolean>(true);
     const [communicationManager, setCommunicationManager] = useState<CommunicationManager>();
-
 
     const { interviewId } = useParams();
 

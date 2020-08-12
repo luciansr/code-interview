@@ -18,6 +18,7 @@ export default function CodeEditor(props: EditorProps): ReactElement<EditorProps
                 mode={"javascript"}
                 theme="github"
                 value={props.value}
+                placeholder={`// write your code here`}
                 // debounceChangePeriod={600}
                 setOptions={{
                     useWorker: false,
