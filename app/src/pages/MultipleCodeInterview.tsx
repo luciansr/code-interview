@@ -5,7 +5,7 @@ import Menu from '../components/Menu';
 
 import { useParams } from 'react-router-dom';
 
-import { MultipleConnectionService, CommunicationManager, MessageType, DataMessage } from '../services';
+import { MultipleConnectionService, CommunicationManager } from '../services/MultipleConnectionService';
 
 import './MultipleCodeInterview.css'
 
@@ -25,7 +25,6 @@ export default function MultipleCodeInterview(): ReactElement {
         console.log(setHtml)
         setHtml(code);
     }
-
 
     useEffect(() => {
         (async () => {

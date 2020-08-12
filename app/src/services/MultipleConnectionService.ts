@@ -84,10 +84,6 @@ export enum MessageType {
     RequestUpdate
 }
 
-export interface DataMessageCallbacks {
-    receiveCodeUpdate: (code: string) => void;
-}
-
 export interface DataMessage {
     type: MessageType;
     data: string;
@@ -201,6 +197,10 @@ class MultipleConnection {
     public SendMessageToUser(userConnectionId: string, message: DataMessage): void {
         this.peerConnections[userConnectionId].connection.send(message);
     }
+}
+
+export interface DataMessageCallbacks {
+    receiveCodeUpdate: (code: string) => void;
 }
 
 export class CommunicationManager {
