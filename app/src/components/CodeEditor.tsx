@@ -4,7 +4,7 @@ import * as ace from 'ace-builds'
 import AceEditor, { IAceOptions } from "react-ace";
 
 import "ace-builds/src-noconflict/mode-javascript";
-import "ace-builds/src-noconflict/theme-github";
+import "ace-builds/src-noconflict/theme-monokai";
 
 interface EditorProps {
     value: string
@@ -16,7 +16,7 @@ export default function CodeEditor(props: EditorProps): ReactElement<EditorProps
         <>
             <AceEditor
                 mode={"javascript"}
-                theme="github"
+                theme="monokai"
                 value={props.value}
                 placeholder={`// write your code here`}
                 // debounceChangePeriod={600}
