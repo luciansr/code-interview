@@ -4,7 +4,7 @@ import Menu from '../components/Menu';
 
 import { useHistory } from 'react-router-dom';
 
-import { /* CodeService, */ MultipleConnectionService } from '../services';
+import { /* CodeService, */ MultipleConnectionService } from '../services/MultipleConnectionService';
 
 const connectionService = new MultipleConnectionService();
 

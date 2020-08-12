@@ -20,16 +20,10 @@ export default function MultipleCodeInterview(): ReactElement {
 
     const { interviewId } = useParams();
 
-    const receiveCode = (code: string) => {
-        console.log(html)
-        console.log(setHtml)
-        setHtml(code);
-    }
-
     useEffect(() => {
         (async () => {
             const communicationManager = await connectionService.getConnection(interviewId, {
-                receiveCodeUpdate: receiveCode
+                receiveCodeUpdate: setHtml
             })
 
             setCommunicationManager(communicationManager);
