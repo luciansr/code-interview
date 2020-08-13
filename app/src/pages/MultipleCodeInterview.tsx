@@ -1,4 +1,4 @@
-import React, { ReactElement, useState, useEffect } from 'react';
+import React, { ReactElement, useState, useEffect, CSSProperties } from 'react';
 import { Jumbotron, Spinner } from 'react-bootstrap';
 import CodeEditor from '../components/CodeEditor';
 import Chat, { ChatMessage, ChatMessageType } from '../components/Chat';
@@ -42,13 +42,22 @@ export default function MultipleCodeInterview(): ReactElement {
         }
     }
 
+    const divStyle: CSSProperties = {
+        display: "flex",
+        width:"100%",
+        height: "calc(100% - 3.5rem)",
+    }
+
     return (<>
         <Menu />
-        <Jumbotron>
+        {/* <Jumbotron> */}
             {!loading || (<><h1> Waiting connection ... </h1> <Spinner animation="border" /></>)}
-            <CodeEditor value={html} onChange={onChangeCode} />
-            <Chat messages={messages} addTextMessage={() => null} />
-        </Jumbotron>
+            <div style={divStyle}>
+                <CodeEditor value={html} onChange={onChangeCode} />
+                <Chat messages={messages} addTextMessage={() => null} />
+            </div>            
+            
+        {/* </Jumbotron> */}
         
     </>);
 }

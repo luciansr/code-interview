@@ -30,8 +30,8 @@ export default function CodeEditor(props: EditorProps): ReactElement<EditorProps
                     vScrollBarAlwaysVisible: true,
                     showGutter: true
                 }}
-                width={"auto"}
-                height={"70%"}
+                width={"100%"}
+                height={"100%"}
                 onChange={props.onChange}
                 name="my_id"
                 editorProps={{
