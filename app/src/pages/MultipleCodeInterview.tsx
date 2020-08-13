@@ -17,10 +17,15 @@ export default function MultipleCodeInterview(): ReactElement {
     const [html, setHtml] = useState<string>(``);
     const [loading, setLoading] = useState<boolean>(true);
     const [communicationManager, setCommunicationManager] = useState<CommunicationManager>();
-    const [messages, setMessages] = useState<ChatMessage[]>([{
-        message: `test message`,
-        type: ChatMessageType.Text
-    }]);
+    const [messages, setMessages] = useState<ChatMessage[]>([
+        {
+            message: `test message`,
+            type: ChatMessageType.Text
+        },{
+            message: `test message`,
+            type: ChatMessageType.Text
+        }
+    ]);
 
     const { interviewId } = useParams();
 
@@ -44,20 +49,27 @@ export default function MultipleCodeInterview(): ReactElement {
 
     const divStyle: CSSProperties = {
         display: "flex",
-        width:"100%",
+        width: "100%",
         height: "calc(100% - 3.5rem)",
+        maxHeight: "calc(100% - 3.5rem)",
+    }
+
+    const addNewMessage = (message: string) => {
+        setMessages(messages.concat([
+            {
+                message: message,
+                type: ChatMessageType.Text
+            }
+        ]))
     }
 
     return (<>
         <Menu />
-        {/* <Jumbotron> */}
-            {!loading || (<><h1> Waiting connection ... </h1> <Spinner animation="border" /></>)}
-            <div style={divStyle}>
-                <CodeEditor value={html} onChange={onChangeCode} />
-                <Chat messages={messages} addTextMessage={() => null} />
-            </div>            
-            
-        {/* </Jumbotron> */}
-        
+        {!loading || (<><h1> Waiting connection ... </h1> <Spinner animation="border" /></>)}
+        <div style={divStyle}>
+            <CodeEditor value={html} onChange={onChangeCode} />
+            <Chat messages={messages} addTextMessage={addNewMessage} />
+        </div>
+
     </>);
 }

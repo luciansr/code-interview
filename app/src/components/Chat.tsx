@@ -22,8 +22,13 @@ const divStyle: CSSProperties = {
     flexDirection: "column",
     width: "100%",
     height: "100%",
+    maxHeight: "100%",
     minWidth: "25rem",
-    maxWidth:"25rem"
+    maxWidth: "25rem"
+}
+
+const innerStyle: CSSProperties = {
+    overflowY:"auto"
 }
 
 const inputStyle: CSSProperties = {
@@ -33,21 +38,37 @@ const inputStyle: CSSProperties = {
 }
 
 export default function Chat(props: ChatProps): ReactElement<ChatProps> {
+    const [message, setMessage] = useState<string>(`test`)
+
+    const onKeyPress = (target: any) => {
+        if (target.charCode == 13) {
+            sendMessage()
+        }
+    }
+
+    const sendMessage = () => {
+        props.addTextMessage(message);
+        setMessage(``)
+    }
+
     return (
         <>
             <div style={divStyle}>
-                <div>
+                <div style={innerStyle}>
                     {props.messages.map(message => (<ChatMessageElement value={message} />))}
                 </div>
                 <div style={inputStyle}>
                     <InputGroup>
                         <FormControl
-                            placeholder="Recipient's username"
-                            aria-label="Recipient's username"
+                            value={message}
+                            onChange={(e) => setMessage(e.target.value)}
+                            onKeyPress={onKeyPress}
+                            placeholder="Send your message"
+                            aria-label="Type your message"
                             aria-describedby="basic-addon2"
                         />
 
-                        <Button>Send</Button>
+                        <Button onClick={() => sendMessage()}>Send</Button>
                     </InputGroup>
                 </div>
             </div>
