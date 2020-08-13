@@ -38,7 +38,7 @@ const inputStyle: CSSProperties = {
 }
 
 export default function Chat(props: ChatProps): ReactElement<ChatProps> {
-    const [message, setMessage] = useState<string>(`test`)
+    const [message, setMessage] = useState<string>(``)
 
     const onKeyPress = (target: any) => {
         if (target.charCode == 13) {
