@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import { Switch, Route, HashRouter } from 'react-router-dom';
-
-import { Home, CodeInterview, MultipleCodeInterview } from './pages';
+import MultipleCodeInterview from './pages/MultipleCodeInterview';
+import Home from './pages/Home';
 
 import './Router.css';
 
@@ -12,9 +12,6 @@ export default function Router(): ReactElement {
         <Switch>
           <Route exact path="/">
             <Home />
-          </Route>
-          <Route path="/c/:interviewId">
-            <CodeInterview />
           </Route>
           <Route path="/mc/:interviewId">
             <MultipleCodeInterview />

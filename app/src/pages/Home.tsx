@@ -4,19 +4,12 @@ import Menu from '../components/Menu';
 
 import { useHistory } from 'react-router-dom';
 
-import { /* CodeService, */ MultipleConnectionService } from '../services/MultipleConnectionService';
+import { MultipleConnectionService } from '../services/MultipleConnectionService';
 
 const connectionService = new MultipleConnectionService();
 
 export default function Home(): ReactElement {
     let history = useHistory();
-
-    // const getCodeInterviewCode = async () => {
-    //     const code = await CodeService.getNewInterviewCode();
-    //     history.push(`/mc/${code}`);
-    // }
-
-    // getCodeInterviewCode()
 
     const getCodeInterviewCode = async () => {
         const code = await connectionService.getNewInterviewCode();
