@@ -20,10 +20,20 @@ export default function MultipleCodeInterview(): ReactElement {
     const [messages, setMessages] = useState<ChatMessage[]>([
         {
             message: `test message`,
-            type: ChatMessageType.Text
-        },{
-            message: `test message`,
-            type: ChatMessageType.Text
+            type: ChatMessageType.Own,
+            sender: `Lucian`
+        }, {
+            message: `test message 2`,
+            type: ChatMessageType.Own,
+            sender: `Lucian`
+        }, {
+            message: `Answer message 2`,
+            type: ChatMessageType.Others,
+            sender: `Rodrigues`
+        }, {
+            message: `Another answer`,
+            type: ChatMessageType.Others,
+            sender: `Rodrigues`
         }
     ]);
 
@@ -58,7 +68,8 @@ export default function MultipleCodeInterview(): ReactElement {
         setMessages(messages.concat([
             {
                 message: message,
-                type: ChatMessageType.Text
+                type: ChatMessageType.Own,
+                sender: `Lucian`
             }
         ]))
     }

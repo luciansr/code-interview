@@ -2,12 +2,14 @@ import React, { useState, ReactElement, useEffect, CSSProperties } from 'react'
 import { FormControl, InputGroup, Button } from 'react-bootstrap';
 
 export enum ChatMessageType {
-    Text
+    Own,
+    Others
 }
 
 export interface ChatMessage {
     type: ChatMessageType
     message: string
+    sender: string
 }
 
 interface ChatProps {
@@ -15,26 +17,26 @@ interface ChatProps {
     addTextMessage: (text: string) => void
 }
 
-
-
-const divStyle: CSSProperties = {
+const chatStyle: CSSProperties = {
     display: "flex",
     flexDirection: "column",
     width: "100%",
     height: "100%",
     maxHeight: "100%",
     minWidth: "25rem",
-    maxWidth: "25rem"
+    maxWidth: "25rem",
+    padding: "1rem",
+    backgroundColor: "#151515"
 }
 
 const innerStyle: CSSProperties = {
-    overflowY:"auto"
+    overflowY: "auto"
 }
 
 const inputStyle: CSSProperties = {
     alignSelf: "stretch",
     marginTop: "auto",
-    padding: "1rem"
+    padding: "0rem"
 }
 
 export default function Chat(props: ChatProps): ReactElement<ChatProps> {
@@ -53,7 +55,7 @@ export default function Chat(props: ChatProps): ReactElement<ChatProps> {
 
     return (
         <>
-            <div style={divStyle}>
+            <div style={chatStyle}>
                 <div style={innerStyle}>
                     {props.messages.map(message => (<ChatMessageElement value={message} />))}
                 </div>
@@ -80,12 +82,22 @@ interface ChatMessageProps {
     value: ChatMessage
 }
 
+const messageSytle: CSSProperties = {
+    margin: "0.1rem 0",
+    fontFamily: `Menlo, Monaco, "Courier New", monospace`,
+    color: "white",
+    fontSize: `0.8rem`
+}
+
+const nameSytle: CSSProperties = {
+    fontWeight: 600
+}
 
 function ChatMessageElement(props: ChatMessageProps): ReactElement<ChatMessageProps> {
     return (
         <>
-            <div >
-                {props.value.message}
+            <div style={messageSytle}>
+                <span style={nameSytle}>{props.value.sender}:</span> <span>{props.value.message}</span>
             </div>
         </>
     )
