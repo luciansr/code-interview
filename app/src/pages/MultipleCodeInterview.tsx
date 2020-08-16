@@ -2,12 +2,12 @@ import React, { ReactElement, useState, useEffect, CSSProperties } from 'react';
 import { Jumbotron, Spinner } from 'react-bootstrap';
 import CodeEditor from '../components/CodeEditor';
 // import MonacoCodeEditor from '../components/MonacoCodeEditor';
-import Chat, { ChatMessage, ChatMessageType } from '../components/Chat';
+import Chat from '../components/Chat';
 import Menu from '../components/Menu';
 
 import { useParams } from 'react-router-dom';
 
-import { MultipleConnectionService, CommunicationManager, ChatMessageData } from '../services/MultipleConnectionService';
+import { MultipleConnectionService, CommunicationManager, ChatMessageData, ChatMessageType } from '../services/MultipleConnectionService';
 
 import './MultipleCodeInterview.css'
 
@@ -18,23 +18,23 @@ export default function MultipleCodeInterview(): ReactElement {
     const [html, setHtml] = useState<string>(``);
     const [loading, setLoading] = useState<boolean>(true);
     const [communicationManager, setCommunicationManager] = useState<CommunicationManager>();
-    const [messages, setMessages] = useState<ChatMessage[]>([
+    const [messages, setMessages] = useState<ChatMessageData[]>([
         {
             message: `test message`,
             type: ChatMessageType.Own,
-            sender: `Lucian`
+            from: `Lucian`
         }, {
             message: `test message 2`,
             type: ChatMessageType.Own,
-            sender: `Lucian`
+            from: `Lucian`
         }, {
             message: `Answer message 2`,
             type: ChatMessageType.Others,
-            sender: `Rodrigues`
+            from: `Rodrigues`
         }, {
             message: `Another answer`,
             type: ChatMessageType.Others,
-            sender: `Rodrigues`
+            from: `Rodrigues`
         }
     ]);
 
@@ -66,8 +66,8 @@ export default function MultipleCodeInterview(): ReactElement {
         maxHeight: "calc(100% - 3.5rem)",
     }
 
-    const receiveChatMessage = (message: ChatMessageData) => {
-        addNewMessageHandler(message.from, message.message)
+    const receiveChatMessage = (messages: ChatMessageData[]) => {
+        setMessages(messages)
     }
 
     const addNewMessageHandler = (from: string, message: string) => {
@@ -75,7 +75,7 @@ export default function MultipleCodeInterview(): ReactElement {
             {
                 message: message,
                 type: ChatMessageType.Own,
-                sender: from
+                from: from
             }])
     }
 

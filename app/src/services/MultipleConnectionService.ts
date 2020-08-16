@@ -165,7 +165,7 @@ class MultipleConnection {
 
 export interface DataMessageCallbacks {
     receiveCodeUpdate: (code: string) => void;
-    receiveChatMessage: (message: ChatMessageData) => void;
+    receiveChatMessage: (messages: ChatMessageData[]) => void;
 }
 
 export enum MessageType {
@@ -182,12 +182,20 @@ export interface DataMessage {
 export interface ChatMessageData {
     message: string
     from: string
+    type: ChatMessageType
+}
+
+
+export enum ChatMessageType {
+    Own,
+    Others
 }
 
 export class CommunicationManager {
 
     private myConnectionId?: string
     private code: string = ``
+    private chatMessages : ChatMessageData[] = []
     private alreadyRequestedInitialState: boolean = false
     private connection: MultipleConnection
 
@@ -216,13 +224,21 @@ export class CommunicationManager {
         })
     }
 
+    private addChatMessage(newChatMessage: ChatMessageData) {
+        this.chatMessages = [...this.chatMessages, newChatMessage]
+    }
+
     public SendChatMessage(message: string): void {
+        const newMessage = <ChatMessageData>{
+            from: this.myConnectionId || ``,
+            message: message
+        }
+
+        this.addChatMessage(newMessage);
+
         this.connection.SendMessage({
             type: MessageType.Chat,
-            data: <ChatMessageData>{
-                from: this.myConnectionId || ``,
-                message: message
-            },
+            data: newMessage,
         })
     }
 
@@ -258,7 +274,8 @@ export class CommunicationManager {
                 break;
             case MessageType.Chat:
                 console.log('Received', message.data);
-                this.messageCallbacks.receiveChatMessage(message.data);
+                this.addChatMessage(message.data);
+                this.messageCallbacks.receiveChatMessage(this.chatMessages);
                 break;
         }
     }

@@ -1,19 +1,10 @@
 import React, { useState, ReactElement, useEffect, CSSProperties } from 'react'
 import { FormControl, InputGroup, Button } from 'react-bootstrap';
+import {ChatMessageData, ChatMessageType} from '../services/MultipleConnectionService'
 
-export enum ChatMessageType {
-    Own,
-    Others
-}
-
-export interface ChatMessage {
-    type: ChatMessageType
-    message: string
-    sender: string
-}
 
 interface ChatProps {
-    messages: ChatMessage[]
+    messages: ChatMessageData[]
     addTextMessage: (text: string) => void
 }
 
@@ -104,7 +95,7 @@ export default function Chat(props: ChatProps): ReactElement<ChatProps> {
 }
 
 interface ChatMessageProps {
-    value: ChatMessage
+    value: ChatMessageData
 }
 
 const messageSytle: CSSProperties = {
@@ -122,7 +113,7 @@ function ChatMessageElement(props: ChatMessageProps): ReactElement<ChatMessagePr
     return (
         <>
             <div style={messageSytle}>
-                <span style={nameSytle}>{props.value.sender}:</span> <span>{props.value.message}</span>
+                <span style={nameSytle}>{props.value.from}:</span> <span>{props.value.message}</span>
             </div>
         </>
     )
