@@ -43,14 +43,23 @@ const textAreaStyle: CSSProperties = {
     resize: "none",
     alignSelf: "stretch",
     width: "100vw",
-    padding: "0.5rem"
+    padding: "0.5rem",
+    color: "white",
+    backgroundColor:"#1d1f21",
+    fontFamily: `Menlo, Monaco, "Courier New", monospace`,
+    fontSize: `0.8rem`,
+    borderRadius: `0.3rem`
 }
 
 const buttonStyle: CSSProperties = {
     position: "absolute",
     right: "0.5rem",
-    borderRadius: "6rem",
-    bottom: "0.5rem"
+    borderRadius: `0.3rem`,
+    bottom: "0.5rem",
+    fontFamily: `Menlo, Monaco, "Courier New", monospace`,
+    fontSize: `0.8rem`,
+    backgroundColor: "gray",
+    borderColor: "gray"
 }
 
 export default function Chat(props: ChatProps): ReactElement<ChatProps> {

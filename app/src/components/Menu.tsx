@@ -12,7 +12,7 @@ const brandStyle: CSSProperties =  {
 
 export default function Menu(): ReactElement {
     return (<>
-        <Navbar bg="dark" variant="dark" color={"#222"}>
+        <Navbar bg="d2ark" variant="dark" style={{backgroundColor:"rgb(29 31 33 / 1)"}}>
             {/* <Link to="/"> */}
                 <Navbar.Brand href="/"><span style={brandStyle}> // Code Interview</span></Navbar.Brand>
             {/* </Link> */}
