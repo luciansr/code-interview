@@ -1,7 +1,7 @@
 import React, { ReactElement, useState, useEffect, CSSProperties } from 'react';
 import { Jumbotron, Spinner } from 'react-bootstrap';
 import CodeEditor from '../components/CodeEditor';
-import MonacoCodeEditor from '../components/MonacoCodeEditor';
+// import MonacoCodeEditor from '../components/MonacoCodeEditor';
 import Chat, { ChatMessage, ChatMessageType } from '../components/Chat';
 import Menu from '../components/Menu';
 
@@ -79,7 +79,7 @@ export default function MultipleCodeInterview(): ReactElement {
         <Menu />
         {!loading || (<><h1> Waiting connection ... </h1> <Spinner animation="border" /></>)}
         <div style={divStyle}>
-            <MonacoCodeEditor value={html} onChange={onChangeCode} />
+            <CodeEditor value={html} onChange={onChangeCode} />
             <Chat messages={messages} addTextMessage={addNewMessage} />
         </div>
 

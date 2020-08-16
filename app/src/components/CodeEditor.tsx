@@ -26,14 +26,16 @@ export default function CodeEditor(props: EditorProps): ReactElement<EditorProps
                     highlightSelectedWord: true,
                     showLineNumbers: true,
                     showPrintMargin: false,
-                    hScrollBarAlwaysVisible: true,
-                    vScrollBarAlwaysVisible: true,
-                    showGutter: true
+                    hScrollBarAlwaysVisible: false,
+                    vScrollBarAlwaysVisible: false,
+                    showGutter: true,
+                    fontSize: "0.8rem",
+                    wrap: true
                 }}
                 width={"100%"}
                 height={"100%"}
                 onChange={props.onChange}
-                name="my_id"
+                name="code-editor"
                 editorProps={{
                     $blockScrolling: true,
                     $highlightPending: true,
