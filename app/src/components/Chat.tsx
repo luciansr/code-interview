@@ -39,6 +39,20 @@ const inputStyle: CSSProperties = {
     padding: "0rem"
 }
 
+const textAreaStyle: CSSProperties = {
+    resize: "none",
+    alignSelf: "stretch",
+    width: "100vw",
+    padding: "0.5rem"
+}
+
+const buttonStyle: CSSProperties = {
+    position: "absolute",
+    right: "0.5rem",
+    borderRadius: "6rem",
+    bottom: "0.5rem"
+}
+
 export default function Chat(props: ChatProps): ReactElement<ChatProps> {
     const [message, setMessage] = useState<string>(``)
 
@@ -61,7 +75,9 @@ export default function Chat(props: ChatProps): ReactElement<ChatProps> {
                 </div>
                 <div style={inputStyle}>
                     <InputGroup>
-                        <FormControl
+                        <textarea
+                            style={textAreaStyle}
+                            rows={3}
                             value={message}
                             onChange={(e) => setMessage(e.target.value)}
                             onKeyPress={onKeyPress}
@@ -70,7 +86,7 @@ export default function Chat(props: ChatProps): ReactElement<ChatProps> {
                             aria-describedby="basic-addon2"
                         />
 
-                        <Button onClick={() => sendMessage()}>Send</Button>
+                        <Button style={buttonStyle} onClick={() => sendMessage()}>Send</Button>
                     </InputGroup>
                 </div>
             </div>

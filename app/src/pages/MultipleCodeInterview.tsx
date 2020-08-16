@@ -1,5 +1,6 @@
 import React, { ReactElement, useState, useEffect, CSSProperties } from 'react';
 import { Jumbotron, Spinner } from 'react-bootstrap';
+import CodeEditor from '../components/CodeEditor';
 import MonacoCodeEditor from '../components/MonacoCodeEditor';
 import Chat, { ChatMessage, ChatMessageType } from '../components/Chat';
 import Menu from '../components/Menu';
