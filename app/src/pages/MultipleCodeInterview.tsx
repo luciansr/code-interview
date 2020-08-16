@@ -7,7 +7,7 @@ import Menu from '../components/Menu';
 
 import { useParams } from 'react-router-dom';
 
-import { MultipleConnectionService, CommunicationManager } from '../services/MultipleConnectionService';
+import { MultipleConnectionService, CommunicationManager, ChatMessageData } from '../services/MultipleConnectionService';
 
 import './MultipleCodeInterview.css'
 
@@ -43,7 +43,8 @@ export default function MultipleCodeInterview(): ReactElement {
     useEffect(() => {
         (async () => {
             const communicationManager = await connectionService.getConnection(interviewId, {
-                receiveCodeUpdate: setHtml
+                receiveCodeUpdate: setHtml,
+                receiveChatMessage: receiveChatMessage
             })
 
             setCommunicationManager(communicationManager);
@@ -65,14 +66,25 @@ export default function MultipleCodeInterview(): ReactElement {
         maxHeight: "calc(100% - 3.5rem)",
     }
 
-    const addNewMessage = (message: string) => {
-        setMessages(messages.concat([
+    const receiveChatMessage = (message: ChatMessageData) => {
+        addNewMessageHandler(message.from, message.message)
+    }
+
+    const addNewMessageHandler = (from: string, message: string) => {
+        setMessages([...messages,
             {
                 message: message,
                 type: ChatMessageType.Own,
-                sender: `Lucian`
-            }
-        ]))
+                sender: from
+            }])
+    }
+
+    const addNewMessage = (message: string) => {
+        addNewMessageHandler(`Lucian`, message)
+
+        if (communicationManager) {
+            communicationManager.SendChatMessage(message)
+        }
     }
 
     return (<>

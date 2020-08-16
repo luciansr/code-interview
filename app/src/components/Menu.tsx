@@ -10,9 +10,18 @@ const brandStyle: CSSProperties =  {
     fontSize: "1.1rem",
 }
 
+const navStyle : CSSProperties = {
+    // boxSizing: "border-box",
+    backgroundColor:"rgb(29 31 33 / 1)", 
+    // border: "2px solid #282a2e"
+    boxShadow: "inset 0 0 0 2px #282a2e",
+    MozBoxShadow: "inset 0 0 0 2px #282a2e",
+    WebkitBoxShadow: "inset 0 0 0 2px #282a2e",
+}
+
 export default function Menu(): ReactElement {
     return (<>
-        <Navbar bg="d2ark" variant="dark" style={{backgroundColor:"rgb(29 31 33 / 1)", border: "2px solid #282a2e"}}>
+        <Navbar bg="d2ark" variant="dark" style={navStyle}>
             {/* <Link to="/"> */}
                 <Navbar.Brand href="/"><span style={brandStyle}> // Code Interview</span></Navbar.Brand>
             {/* </Link> */}

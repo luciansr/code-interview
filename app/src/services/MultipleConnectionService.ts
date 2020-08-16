@@ -42,76 +42,6 @@ export class MultipleConnectionService {
 }
 
 
-export interface DataMessageCallbacks {
-    receiveCodeUpdate: (code: string) => void;
-}
-
-export class CommunicationManager {
-
-    private myConnectionId?: string
-    private code: string = ``
-    private alreadyRequestedInitialState: boolean = false
-    private connection: MultipleConnection
-
-    constructor(
-        private localId: string,
-        private workspaceId: string,
-        private messageCallbacks: DataMessageCallbacks) {
-        this.connection = new MultipleConnection(localId, workspaceId, 
-            (message: DataMessage) => this.ReceiveMessage(message),
-            (myConnectionId: string) => this.OnConnect(myConnectionId),
-            (userConnectionId: string) => this.OnConnectToUser(userConnectionId))
-    }
-
-    public SendCodeUpdateToUser(userConnectionId: string): void {
-        this.connection.SendMessageToUser(userConnectionId, {
-            type: MessageType.Code,
-            data: this.code
-        })
-    }
-
-    public SendCodeUpdate(code: string): void {
-        this.code = code;
-        this.connection.SendMessage({
-            data: code,
-            type: MessageType.Code
-        })
-    }
-
-    private OnConnect(myConnectionId: string) {
-        console.log(`Service: connected with id ${myConnectionId}`)
-        this.myConnectionId = myConnectionId;
-    }
-
-    private OnConnectToUser(userConnectionId: string) {
-        console.log(`Service: connected with user id ${userConnectionId}`)
-        if (this.code.length === 0 && !this.alreadyRequestedInitialState) {
-            this.RequestStateUpdateToUser(userConnectionId)
-            this.alreadyRequestedInitialState = true;
-        }
-    }
-
-    private RequestStateUpdateToUser(userConnectionId: string) {
-        this.connection.SendMessageToUser(userConnectionId, {
-            data: this.myConnectionId || ``,
-            type: MessageType.RequestUpdate
-        })
-    }
-
-    private ReceiveMessage(message: DataMessage) {
-        switch (message.type) {
-            case MessageType.Code:
-                console.log('Received', message.data);
-                this.code = message.data;
-                this.messageCallbacks.receiveCodeUpdate(message.data);
-                break;
-            case MessageType.RequestUpdate:
-                this.SendCodeUpdateToUser(message.data)
-                break;
-        }
-    }
-}
-
 interface ConnectionState {
     connection: Peer.DataConnection;
     onDataInitialized: boolean
@@ -119,17 +49,6 @@ interface ConnectionState {
 
 interface ConnectionDictionary {
     [id: string]: ConnectionState
-}
-
-export enum MessageType {
-    Code,
-    Chat,
-    RequestUpdate
-}
-
-export interface DataMessage {
-    type: MessageType;
-    data: string;
 }
 
 class MultipleConnection {
@@ -177,7 +96,7 @@ class MultipleConnection {
         });
         this.peer.on('error', function (err) {
             console.log(err);
-            alert('' + err);
+            // alert('' + err);
         });
     }
 
@@ -239,5 +158,108 @@ class MultipleConnection {
 
     public SendMessageToUser(userConnectionId: string, message: DataMessage): void {
         this.peerConnections[userConnectionId].connection.send(message);
+    }
+}
+
+
+
+export interface DataMessageCallbacks {
+    receiveCodeUpdate: (code: string) => void;
+    receiveChatMessage: (message: ChatMessageData) => void;
+}
+
+export enum MessageType {
+    RequestUpdate,
+    Code,
+    Chat,
+}
+
+export interface DataMessage {
+    type: MessageType;
+    data: any;
+}
+
+export interface ChatMessageData {
+    message: string
+    from: string
+}
+
+export class CommunicationManager {
+
+    private myConnectionId?: string
+    private code: string = ``
+    private alreadyRequestedInitialState: boolean = false
+    private connection: MultipleConnection
+
+    constructor(
+        private localId: string,
+        private workspaceId: string,
+        private messageCallbacks: DataMessageCallbacks) {
+        this.connection = new MultipleConnection(localId, workspaceId,
+            (message: DataMessage) => this.ReceiveMessage(message),
+            (myConnectionId: string) => this.OnConnect(myConnectionId),
+            (userConnectionId: string) => this.OnConnectToUser(userConnectionId))
+    }
+
+    public SendCodeUpdateToUser(userConnectionId: string): void {
+        this.connection.SendMessageToUser(userConnectionId, {
+            type: MessageType.Code,
+            data: this.code
+        })
+    }
+
+    public SendCodeUpdate(code: string): void {
+        this.code = code;
+        this.connection.SendMessage({
+            data: code,
+            type: MessageType.Code
+        })
+    }
+
+    public SendChatMessage(message: string): void {
+        this.connection.SendMessage({
+            type: MessageType.Chat,
+            data: <ChatMessageData>{
+                from: this.myConnectionId || ``,
+                message: message
+            },
+        })
+    }
+
+    private OnConnect(myConnectionId: string) {
+        console.log(`Service: connected with id ${myConnectionId}`)
+        this.myConnectionId = myConnectionId;
+    }
+
+    private OnConnectToUser(userConnectionId: string) {
+        console.log(`Service: connected with user id ${userConnectionId}`)
+        if (this.code.length === 0 && !this.alreadyRequestedInitialState) {
+            this.RequestStateUpdateToUser(userConnectionId)
+            this.alreadyRequestedInitialState = true;
+        }
+    }
+
+    private RequestStateUpdateToUser(userConnectionId: string) {
+        this.connection.SendMessageToUser(userConnectionId, {
+            data: this.myConnectionId || ``,
+            type: MessageType.RequestUpdate
+        })
+    }
+
+    private ReceiveMessage(message: DataMessage) {
+        switch (message.type) {
+            case MessageType.Code:
+                console.log('Received', message.data);
+                this.code = message.data;
+                this.messageCallbacks.receiveCodeUpdate(message.data);
+                break;
+            case MessageType.RequestUpdate:
+                this.SendCodeUpdateToUser(message.data)
+                break;
+            case MessageType.Chat:
+                console.log('Received', message.data);
+                this.messageCallbacks.receiveChatMessage(message.data);
+                break;
+        }
     }
 }
