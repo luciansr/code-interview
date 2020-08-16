@@ -1,11 +1,19 @@
-import React, { useState, ReactElement, useEffect} from 'react'
+import React, { useState, ReactElement, useEffect } from 'react'
 import * as ace from 'ace-builds'
 
 import AceEditor, { IAceOptions } from "react-ace";
 
-import "ace-builds/src-noconflict/mode-typescript";
-import "ace-builds/src-noconflict/theme-monokai";
-import "ace-builds/src-noconflict/theme-tomorrow_night";
+import "ace-builds/src-min-noconflict/mode-javascript";
+import "ace-builds/src-min-noconflict/mode-typescript";
+
+import "ace-builds/src-min-noconflict/theme-tomorrow_night";
+import 'ace-builds/src-min-noconflict/ext-searchbox';
+import 'ace-builds/src-min-noconflict/keybinding-vscode';
+import 'ace-builds/src-min-noconflict/keybinding-sublime';
+import 'ace-builds/src-min-noconflict/keybinding-vim';
+import "ace-builds/src-min-noconflict/ext-language_tools"
+import "ace-builds/src-min-noconflict/ext-error_marker"
+import "ace-builds/src-min-noconflict/ext-code_lens"
 
 interface EditorProps {
     value: string
@@ -19,8 +27,15 @@ export default function CodeEditor(props: EditorProps): ReactElement<EditorProps
                 mode={"typescript"}
                 theme="tomorrow_night"
                 value={props.value}
+                enableLiveAutocompletion={true}
                 placeholder={`// write your code here`}
+                highlightActiveLine={true}
+                showPrintMargin={false}
+                enableBasicAutocompletion={true}
+                enableSnippets={true}
                 // debounceChangePeriod={600}
+                keyboardHandler={`vscode`}
+                onValidate={(data) => console.log(data)}
                 setOptions={{
                     useWorker: false,
                     highlightActiveLine: true,
@@ -32,7 +47,11 @@ export default function CodeEditor(props: EditorProps): ReactElement<EditorProps
                     showGutter: true,
                     fontSize: "0.9rem",
                     wrap: true,
-                    fontFamily: `Menlo, Monaco, "Courier New", monospace`
+                    fontFamily: `Menlo, Monaco, "Courier New", monospace`,
+                    enableBasicAutocompletion: true,
+                    enableLiveAutocompletion: true,
+                    enableSnippets: true,
+
                 }}
                 width={"100%"}
                 height={"100%"}
@@ -41,7 +60,8 @@ export default function CodeEditor(props: EditorProps): ReactElement<EditorProps
                 editorProps={{
                     $blockScrolling: true,
                     $highlightPending: true,
-                    $highlightTagPending: true
+                    $highlightTagPending: true,
+
                 }}
             />
         </>
