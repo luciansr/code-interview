@@ -25,7 +25,7 @@ const chatStyle: CSSProperties = {
     maxHeight: "100%",
     minWidth: "25rem",
     maxWidth: "25rem",
-    padding: "1rem",
+    padding: "0.8rem 1rem",
     backgroundColor: "#151515"
 }
 
