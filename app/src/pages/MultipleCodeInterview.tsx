@@ -45,7 +45,8 @@ export default function MultipleCodeInterview(): ReactElement {
         (async () => {
             const communicationManager = await connectionService.getConnection(interviewId, {
                 receiveCodeUpdate: setHtml,
-                receiveChatMessage: receiveChatMessage
+                receiveChatMessage: receiveChatMessage,
+                receiveNameUpdate: receiveNameUpdate
             })
 
             setCommunicationManager(communicationManager);
@@ -71,6 +72,10 @@ export default function MultipleCodeInterview(): ReactElement {
         setMessages(messages)
     }
 
+    const receiveNameUpdate = (name: string) => {
+        setName(name)
+    }
+
     const addNewMessageHandler = (from: string, message: string) => {
         setMessages([...messages,
             {
@@ -84,14 +89,14 @@ export default function MultipleCodeInterview(): ReactElement {
         addNewMessageHandler(`Lucian`, message)
 
         if (communicationManager) {
-            communicationManager.SendChatMessage(message)
+            communicationManager.SendChatMessage(name, message)
         }
     }
 
     const handleSetName = (name: string) => {
         setName(name)
         if(communicationManager) {
-            communicationManager.UpdateName(name)
+            communicationManager.SetName(name)
         }
     }
 

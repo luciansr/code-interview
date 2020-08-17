@@ -167,6 +167,7 @@ class MultipleConnection {
 export interface DataMessageCallbacks {
     receiveCodeUpdate: (code: string) => void;
     receiveChatMessage: (messages: ChatMessageData[]) => void;
+    receiveNameUpdate: (name: string) => void;
 }
 
 export enum MessageType {
@@ -196,6 +197,7 @@ export class CommunicationManager {
 
     private myConnectionId?: string
     private code: string = ``
+    private name: string = ``
     private chatMessages : ChatMessageData[] = []
     private alreadyRequestedInitialState: boolean = false
     private connection: MultipleConnection
@@ -229,9 +231,9 @@ export class CommunicationManager {
         this.chatMessages = [...this.chatMessages, newChatMessage]
     }
 
-    public SendChatMessage(message: string): void {
+    public SendChatMessage(from: string, message: string): void {
         const newMessage = <ChatMessageData>{
-            from: this.myConnectionId || ``,
+            from: from,
             message: message
         }
 
@@ -243,9 +245,16 @@ export class CommunicationManager {
         })
     }
 
+    public SetName(name: string) {
+        this.name = name;
+    }
+
     private OnConnect(myConnectionId: string) {
         console.log(`Service: connected with id ${myConnectionId}`)
         this.myConnectionId = myConnectionId;
+        if(this.name === ``) {
+            this.messageCallbacks.receiveNameUpdate(`User ${myConnectionId}`)
+        }
     }
 
     private OnConnectToUser(userConnectionId: string) {
@@ -261,19 +270,6 @@ export class CommunicationManager {
             data: this.myConnectionId || ``,
             type: MessageType.RequestUpdate
         })
-    }
-
-    public async UpdateName(myName: string) {
-        if(this.myConnectionId) {
-            // debounce(async () => {
-                await codeClient.UpdateWorkspace({
-                    connectionId: this.myConnectionId || ``,
-                    userId: this.localId,
-                    workspaceId: this.workspaceId,
-                    name: myName
-                })
-            // }, 1000)
-        }
     }
 
     private ReceiveMessage(message: DataMessage) {

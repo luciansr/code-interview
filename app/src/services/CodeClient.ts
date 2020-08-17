@@ -6,7 +6,7 @@ interface UserConnection {
 }
 
 export interface WorkspaceUser extends UserConnection {
-    
+     
 }
 
 
