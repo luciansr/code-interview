@@ -86,7 +86,7 @@ export default function MultipleCodeInterview(): ReactElement {
     }
 
     const addNewMessage = (message: string) => {
-        addNewMessageHandler(`Lucian`, message)
+        addNewMessageHandler(name, message)
 
         if (communicationManager) {
             communicationManager.SendChatMessage(name, message)
