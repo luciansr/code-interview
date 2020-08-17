@@ -30,6 +30,7 @@ namespace Services
                 {
                     ConnectionId = userConnection.ConnectionId,
                     UserId = userConnection.UserId,
+                    Name = userConnection.Name,
                     WorkspaceId = GetNewId()
                 });
         }
@@ -54,7 +55,7 @@ namespace Services
             {
                 Id = userConnection.UserId,
                 ConnectionId = userConnection.ConnectionId,
-                Name = $"User {userConnection.UserId}"
+                Name = string.IsNullOrWhiteSpace(userConnection.Name) ? $"User {userConnection.UserId}" : userConnection.Name.Trim()
             };
         }
 

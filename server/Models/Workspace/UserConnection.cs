@@ -11,5 +11,8 @@ namespace Models.Workspace
         [Required]
         [JsonPropertyName("connectionId")]
         public string ConnectionId { get; set; }
+
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
     }
 }

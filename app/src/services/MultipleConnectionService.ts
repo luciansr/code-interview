@@ -1,5 +1,6 @@
 import Peer from 'peerjs';
-import { CodeClient } from './CodeClient';
+import { CodeClient, WorkspaceUser } from './CodeClient';
+import {debounce} from './Shared'
 
 const codeClient = new CodeClient();
 
@@ -260,6 +261,19 @@ export class CommunicationManager {
             data: this.myConnectionId || ``,
             type: MessageType.RequestUpdate
         })
+    }
+
+    public async UpdateName(myName: string) {
+        if(this.myConnectionId) {
+            // debounce(async () => {
+                await codeClient.UpdateWorkspace({
+                    connectionId: this.myConnectionId || ``,
+                    userId: this.localId,
+                    workspaceId: this.workspaceId,
+                    name: myName
+                })
+            // }, 1000)
+        }
     }
 
     private ReceiveMessage(message: DataMessage) {

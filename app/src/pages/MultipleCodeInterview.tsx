@@ -3,7 +3,7 @@ import { Jumbotron, Spinner } from 'react-bootstrap';
 import CodeEditor from '../components/CodeEditor';
 // import MonacoCodeEditor from '../components/MonacoCodeEditor';
 import Chat from '../components/Chat';
-import Menu from '../components/Menu';
+import CodingMenu from '../components/CodingMenu';
 
 import { useParams } from 'react-router-dom';
 
@@ -15,6 +15,7 @@ const connectionService = new MultipleConnectionService();
 
 
 export default function MultipleCodeInterview(): ReactElement {
+    const [name, setName] = useState<string>(`Lucian`);
     const [html, setHtml] = useState<string>(``);
     const [loading, setLoading] = useState<boolean>(true);
     const [communicationManager, setCommunicationManager] = useState<CommunicationManager>();
@@ -87,8 +88,16 @@ export default function MultipleCodeInterview(): ReactElement {
         }
     }
 
+    const handleSetName = (name: string) => {
+        setName(name)
+        if(communicationManager) {
+            communicationManager.UpdateName(name)
+        }
+    }
+
     return (<>
-        <Menu />
+        <CodingMenu name={name} onChangeName={handleSetName}/>
+
         {!loading || (<><h1> Waiting connection ... </h1> <Spinner animation="border" /></>)}
         <div style={divStyle}>
             <CodeEditor value={html} onChange={onChangeCode} />

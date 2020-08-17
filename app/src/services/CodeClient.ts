@@ -2,10 +2,11 @@
 interface UserConnection {
     userId: string
     connectionId: string
+    name?: string
 }
 
-interface WorkspaceUser extends UserConnection {
-    name: string
+export interface WorkspaceUser extends UserConnection {
+    
 }
 
 
