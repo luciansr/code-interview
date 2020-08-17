@@ -1,6 +1,6 @@
 import React, { ReactElement, CSSProperties } from 'react';
 
-import { Button, Navbar, Nav, Form, FormControl, NavDropdown } from 'react-bootstrap';
+import { Button, Navbar, Nav, Form, FormControl, NavDropdown, ButtonGroup } from 'react-bootstrap';
 
 // import { BrowserRouter, Switch, Route, Link } from 'react-router-dom';
 
@@ -19,26 +19,43 @@ const navStyle: CSSProperties = {
     WebkitBoxShadow: "inset 0 0 0 2px #282a2e",
 }
 
-
-
 interface MenuProps {
+    language: string
+    onChangeLanguage: (language: string) => void
+
     name: string
     onChangeName: (name: string) => void
 }
+
+const nameInput: CSSProperties = {
+    color: "white",
+    backgroundColor: "rgb(21, 21, 21)",
+    fontFamily: `Menlo, Monaco, "Courier New", monospace`,
+    fontStretch: `expanded`,
+    fontSize: `1rem`,
+    border: "black",
+    width: `13rem`,
+}
+
+const divStyle: CSSProperties = {
+    marginRight: "1rem"
+}
+
+const languages : string [] = [
+    'JavaScript',
+    'TypeScript',
+    'C#',
+    'C++',
+    'Python',
+    'Java',
+    'Golang',
+]
 
 export default function CodingMenu(props: MenuProps): ReactElement<MenuProps> {
 
     // const size = props.name.length > 5 ? props.name.length : 5;
 
-    const nameInput : CSSProperties = {
-        color: "white",
-        backgroundColor: "rgb(21, 21, 21)",
-        fontFamily: `Menlo, Monaco, "Courier New", monospace`,
-        fontStretch: `expanded`,
-        fontSize: `1rem`,
-        border: "black",
-        width: `13rem`,
-    }
+
 
     return (<>
         <Navbar bg="d2ark" variant="dark" style={navStyle}>
@@ -58,10 +75,27 @@ export default function CodingMenu(props: MenuProps): ReactElement<MenuProps> {
                         <NavDropdown.Divider />
                         <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
                     </NavDropdown> */}
-                </Nav> 
+                </Nav>
 
+                <div style={divStyle}>
+                    <Form inline>
+                        <Form.Group controlId="exampleForm.ControlSelect1">
+                            <Form.Label>Example select</Form.Label>
+                            <Form.Control as="select" value={props.language} onChange={(e) => props.onChangeLanguage(e.target.value)}>
+                                {languages.map(lang => (<option>{lang}</option>))}
+                            </Form.Control>
+                        </Form.Group>
+                    </Form>
+                </div>
+                <div style={divStyle}>
+                    <ButtonGroup aria-label="Basic example">
+                        <Button variant="secondary">VSCode</Button>
+                        <Button variant="outline-secondary">Vim</Button>
+                    </ButtonGroup>
+                </div>
 
                 <Form inline>
+
                     <FormControl
                         style={nameInput}
                         type="text"

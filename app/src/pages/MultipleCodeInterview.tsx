@@ -15,6 +15,8 @@ const connectionService = new MultipleConnectionService();
 
 
 export default function MultipleCodeInterview(): ReactElement {
+    const [language, setLanguage] = useState<string>(`JavaScript`);
+    const [editorMode, setEditorMode] = useState<string>(`VSCode`);
     const [name, setName] = useState<string>(`Lucian`);
     const [html, setHtml] = useState<string>(``);
     const [loading, setLoading] = useState<boolean>(true);
@@ -101,11 +103,11 @@ export default function MultipleCodeInterview(): ReactElement {
     }
 
     return (<>
-        <CodingMenu name={name} onChangeName={handleSetName}/>
+        <CodingMenu name={name} onChangeName={handleSetName} language={language} onChangeLanguage={setLanguage} />
 
         {!loading || (<><h1> Waiting connection ... </h1> <Spinner animation="border" /></>)}
         <div style={divStyle}>
-            <CodeEditor value={html} onChange={onChangeCode} />
+            <CodeEditor language={language} mode={editorMode} value={html} onChange={onChangeCode} />
             <Chat messages={messages} addTextMessage={addNewMessage} />
         </div>
 

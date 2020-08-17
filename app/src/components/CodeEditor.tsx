@@ -5,17 +5,23 @@ import AceEditor, { IAceOptions } from "react-ace";
 
 import "ace-builds/src-min-noconflict/mode-javascript";
 import "ace-builds/src-min-noconflict/mode-typescript";
+import "ace-builds/src-min-noconflict/mode-java";
+import "ace-builds/src-min-noconflict/mode-python";
+import "ace-builds/src-min-noconflict/mode-c_cpp";
+import "ace-builds/src-min-noconflict/mode-csharp";
+import "ace-builds/src-min-noconflict/mode-golang";
+
+
+import 'ace-builds/src-min-noconflict/keybinding-vscode';
+import 'ace-builds/src-min-noconflict/keybinding-vim';
 
 import "ace-builds/src-min-noconflict/theme-tomorrow_night";
-import 'ace-builds/src-min-noconflict/ext-searchbox';
-import 'ace-builds/src-min-noconflict/keybinding-vscode';
-import 'ace-builds/src-min-noconflict/keybinding-sublime';
-import 'ace-builds/src-min-noconflict/keybinding-vim';
+
 import "ace-builds/src-min-noconflict/ext-language_tools"
-import "ace-builds/src-min-noconflict/ext-error_marker"
-import "ace-builds/src-min-noconflict/ext-code_lens"
 
 interface EditorProps {
+    language: string
+    mode: string
     value: string
     onChange: (value: string) => void
 }
@@ -24,7 +30,7 @@ export default function CodeEditor(props: EditorProps): ReactElement<EditorProps
     return (
         <>
             <AceEditor
-                mode={"typescript"}
+                mode={props.language.toLowerCase()}
                 theme="tomorrow_night"
                 value={props.value}
                 enableLiveAutocompletion={true}
@@ -34,7 +40,7 @@ export default function CodeEditor(props: EditorProps): ReactElement<EditorProps
                 enableBasicAutocompletion={true}
                 enableSnippets={true}
                 // debounceChangePeriod={600}
-                keyboardHandler={`vscode`}
+                keyboardHandler={props.mode.toLowerCase()}
                 onValidate={(data) => console.log(data)}
                 setOptions={{
                     useWorker: false,
