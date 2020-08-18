@@ -86,10 +86,10 @@ export default function MultipleCodeInterview(): ReactElement {
     }
 
     const handleSetLanguage = (language: string) => {
-        setLanguage(name)
         if (communicationManager) {
             communicationManager.SendLanguageUpdate(language)
         }
+        setLanguage(language)
     }
 
     return (<>

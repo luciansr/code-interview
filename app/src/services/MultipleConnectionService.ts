@@ -199,6 +199,7 @@ export class CommunicationManager {
 
     private myConnectionId?: string
     private code: string = ``
+    private language: string = ``
     private name: string = ``
     private chatMessages: ChatMessageData[] = []
     private alreadyRequestedInitialState: boolean = false
@@ -214,10 +215,15 @@ export class CommunicationManager {
             (userConnectionId: string) => this.OnConnectToUser(userConnectionId))
     }
 
-    public SendCodeUpdateToUser(userConnectionId: string): void {
+    public SendUpdateToUser(userConnectionId: string): void {
         this.connection.SendMessageToUser(userConnectionId, {
             type: MessageType.Code,
             data: this.code
+        })
+
+        this.connection.SendMessageToUser(userConnectionId, {
+            type: MessageType.UpdateLanguage,
+            data: this.language
         })
     }
 
@@ -230,6 +236,7 @@ export class CommunicationManager {
     }
 
     public SendLanguageUpdate(language: string): void {
+        this.language = language;
         this.connection.SendMessage({
             data: language,
             type: MessageType.UpdateLanguage
@@ -288,13 +295,14 @@ export class CommunicationManager {
                 this.messageCallbacks.receiveCodeUpdate(message.data);
                 break;
             case MessageType.RequestUpdate:
-                this.SendCodeUpdateToUser(message.data)
+                this.SendUpdateToUser(message.data)
                 break;
             case MessageType.Chat:
                 this.addChatMessage(message.data);
                 this.messageCallbacks.receiveChatMessage(this.chatMessages);
                 break;
             case MessageType.UpdateLanguage:
+                this.language = message.data;
                 this.messageCallbacks.receiveLanguageUpdate(message.data)
                 break;
         }
