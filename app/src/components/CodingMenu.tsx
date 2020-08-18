@@ -41,14 +41,35 @@ const divStyle: CSSProperties = {
     marginRight: "1rem"
 }
 
-const languages : string [] = [
-    'JavaScript',
-    'TypeScript',
-    'C#',
-    'C++',
-    'Python',
-    'Java',
-    'Golang',
+const languages: {name: string, value:string}[] =  [
+    {
+        name: "JavaScript",
+        value: "JavaScript"
+    },
+    {
+        name: "TypeScript",
+        value: "TypeScript"
+    },
+    {
+        name: "C#",
+        value: "CSharp"
+    },
+    {
+        name: "C++",
+        value: "C_CPP"
+    },
+    {
+        name: "Python",
+        value: "Python"
+    },
+    {
+        name: "Java",
+        value: "Java"
+    },
+    {
+        name: "Golang",
+        value: "Golang"
+    }
 ]
 
 export default function CodingMenu(props: MenuProps): ReactElement<MenuProps> {
@@ -82,7 +103,7 @@ export default function CodingMenu(props: MenuProps): ReactElement<MenuProps> {
                         <Form.Group controlId="exampleForm.ControlSelect1">
                             <Form.Label>Example select</Form.Label>
                             <Form.Control as="select" value={props.language} onChange={(e) => props.onChangeLanguage(e.target.value)}>
-                                {languages.map(lang => (<option>{lang}</option>))}
+                                {languages.map(lang => (<option value={lang.value}>{lang.name}</option>))}
                             </Form.Control>
                         </Form.Group>
                     </Form>

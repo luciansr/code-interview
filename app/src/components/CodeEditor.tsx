@@ -43,6 +43,7 @@ export default function CodeEditor(props: EditorProps): ReactElement<EditorProps
                 keyboardHandler={props.mode.toLowerCase()}
                 onValidate={(data) => console.log(data)}
                 setOptions={{
+                    showInvisibles: true,
                     useWorker: false,
                     highlightActiveLine: true,
                     highlightSelectedWord: true,
