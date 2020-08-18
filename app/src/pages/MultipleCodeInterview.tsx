@@ -17,29 +17,11 @@ const connectionService = new MultipleConnectionService();
 export default function MultipleCodeInterview(): ReactElement {
     const [language, setLanguage] = useState<string>(`typescript`);
     const [editorMode, setEditorMode] = useState<string>(`vscode`);
-    const [name, setName] = useState<string>(`Lucian`);
+    const [name, setName] = useState<string>(``);
     const [html, setHtml] = useState<string>(``);
     const [loading, setLoading] = useState<boolean>(true);
     const [communicationManager, setCommunicationManager] = useState<CommunicationManager>();
-    const [messages, setMessages] = useState<ChatMessageData[]>([
-        {
-            message: `test message`,
-            type: ChatMessageType.Own,
-            from: `Lucian`
-        }, {
-            message: `test message 2`,
-            type: ChatMessageType.Own,
-            from: `Lucian`
-        }, {
-            message: `Answer message 2`,
-            type: ChatMessageType.Others,
-            from: `Rodrigues`
-        }, {
-            message: `Another answer`,
-            type: ChatMessageType.Others,
-            from: `Rodrigues`
-        }
-    ]);
+    const [messages, setMessages] = useState<ChatMessageData[]>([]);
 
     const { interviewId } = useParams();
 
