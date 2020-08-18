@@ -102,7 +102,7 @@ export default function CodingMenu(props: MenuProps): ReactElement<MenuProps> {
         <Navbar bg="d2ark" variant="dark" style={navStyle}>
             {/* <Link to="/"> */}
             <Navbar.Brand href="/">
-                <span style={brandStyle}>Code Interview</span>
+                <span style={brandStyle}>Coding Interview</span>
             </Navbar.Brand>
             {/* </Link> */}
             <Navbar.Collapse id="basic-navbar-nav">
