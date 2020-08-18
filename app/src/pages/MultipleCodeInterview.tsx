@@ -30,7 +30,8 @@ export default function MultipleCodeInterview(): ReactElement {
             const communicationManager = await connectionService.getConnection(interviewId, {
                 receiveCodeUpdate: setHtml,
                 receiveChatMessage: receiveChatMessage,
-                receiveNameUpdate: receiveNameUpdate
+                receiveNameUpdate: receiveNameUpdate,
+                receiveLanguageUpdate: setLanguage
             })
 
             setCommunicationManager(communicationManager);
@@ -84,12 +85,19 @@ export default function MultipleCodeInterview(): ReactElement {
         }
     }
 
+    const handleSetLanguage = (language: string) => {
+        setLanguage(name)
+        if (communicationManager) {
+            communicationManager.SendLanguageUpdate(language)
+        }
+    }
+
     return (<>
         <CodingMenu
             name={name}
             onChangeName={handleSetName}
             language={language}
-            onChangeLanguage={setLanguage}
+            onChangeLanguage={handleSetLanguage}
             editorMode={editorMode}
             onChangeEditorMode={setEditorMode} />
 

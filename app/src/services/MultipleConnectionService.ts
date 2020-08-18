@@ -1,6 +1,6 @@
 import Peer from 'peerjs';
 import { CodeClient, WorkspaceUser } from './CodeClient';
-import {debounce} from './Shared'
+import { debounce } from './Shared'
 
 const codeClient = new CodeClient();
 
@@ -168,12 +168,14 @@ export interface DataMessageCallbacks {
     receiveCodeUpdate: (code: string) => void;
     receiveChatMessage: (messages: ChatMessageData[]) => void;
     receiveNameUpdate: (name: string) => void;
+    receiveLanguageUpdate: (language: string) => void;
 }
 
 export enum MessageType {
     RequestUpdate,
     Code,
     Chat,
+    UpdateLanguage,
 }
 
 export interface DataMessage {
@@ -198,7 +200,7 @@ export class CommunicationManager {
     private myConnectionId?: string
     private code: string = ``
     private name: string = ``
-    private chatMessages : ChatMessageData[] = []
+    private chatMessages: ChatMessageData[] = []
     private alreadyRequestedInitialState: boolean = false
     private connection: MultipleConnection
 
@@ -227,6 +229,13 @@ export class CommunicationManager {
         })
     }
 
+    public SendLanguageUpdate(language: string): void {
+        this.connection.SendMessage({
+            data: language,
+            type: MessageType.UpdateLanguage
+        })
+    }
+
     private addChatMessage(newChatMessage: ChatMessageData) {
         this.chatMessages = [...this.chatMessages, newChatMessage]
     }
@@ -252,7 +261,7 @@ export class CommunicationManager {
     private OnConnect(myConnectionId: string) {
         console.log(`Service: connected with id ${myConnectionId}`)
         this.myConnectionId = myConnectionId;
-        if(this.name === ``) {
+        if (this.name === ``) {
             this.messageCallbacks.receiveNameUpdate(`User ${myConnectionId}`)
         }
     }
@@ -275,7 +284,6 @@ export class CommunicationManager {
     private ReceiveMessage(message: DataMessage) {
         switch (message.type) {
             case MessageType.Code:
-                console.log('Received', message.data);
                 this.code = message.data;
                 this.messageCallbacks.receiveCodeUpdate(message.data);
                 break;
@@ -283,9 +291,11 @@ export class CommunicationManager {
                 this.SendCodeUpdateToUser(message.data)
                 break;
             case MessageType.Chat:
-                console.log('Received', message.data);
                 this.addChatMessage(message.data);
                 this.messageCallbacks.receiveChatMessage(this.chatMessages);
+                break;
+            case MessageType.UpdateLanguage:
+                this.messageCallbacks.receiveLanguageUpdate(message.data)
                 break;
         }
     }
