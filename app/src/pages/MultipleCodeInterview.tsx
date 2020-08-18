@@ -15,7 +15,7 @@ const connectionService = new MultipleConnectionService();
 
 
 export default function MultipleCodeInterview(): ReactElement {
-    const [language, setLanguage] = useState<string>(`JavaScript`);
+    const [language, setLanguage] = useState<string>(`typescript`);
     const [editorMode, setEditorMode] = useState<string>(`vscode`);
     const [name, setName] = useState<string>(`Lucian`);
     const [html, setHtml] = useState<string>(``);

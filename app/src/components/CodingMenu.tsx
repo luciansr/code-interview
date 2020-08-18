@@ -52,32 +52,32 @@ interface KeyValue {
 
 const languages: KeyValue[] = [
     {
-        name: "JavaScript",
-        value: "JavaScript"
+        name: "TypeScript",
+        value: "typescript"
     },
     {
-        name: "TypeScript",
-        value: "TypeScript"
+        name: "JavaScript",
+        value: "javascript"
     },
     {
         name: "C#",
-        value: "CSharp"
+        value: "csharp"
     },
     {
         name: "C++",
-        value: "C_CPP"
+        value: "c_cpp"
     },
     {
         name: "Python",
-        value: "Python"
+        value: "python"
     },
     {
         name: "Java",
-        value: "Java"
+        value: "java"
     },
     {
         name: "Golang",
-        value: "Golang"
+        value: "golang"
     }
 ]
 
