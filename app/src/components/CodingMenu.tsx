@@ -23,6 +23,10 @@ interface MenuProps {
     language: string
     onChangeLanguage: (language: string) => void
 
+
+    editorMode: string
+    onChangeEditorMode: (mode: string) => void
+
     name: string
     onChangeName: (name: string) => void
 }
@@ -41,7 +45,12 @@ const divStyle: CSSProperties = {
     marginRight: "1rem"
 }
 
-const languages: {name: string, value:string}[] =  [
+interface KeyValue {
+    name: string
+    value: string
+}
+
+const languages: KeyValue[] = [
     {
         name: "JavaScript",
         value: "JavaScript"
@@ -69,6 +78,17 @@ const languages: {name: string, value:string}[] =  [
     {
         name: "Golang",
         value: "Golang"
+    }
+]
+
+const modes: KeyValue[] = [
+    {
+        name: "VSCode",
+        value: "vscode"
+    },
+    {
+        name: "Vim",
+        value: "vim"
     }
 ]
 
@@ -110,8 +130,11 @@ export default function CodingMenu(props: MenuProps): ReactElement<MenuProps> {
                 </div>
                 <div style={divStyle}>
                     <ButtonGroup aria-label="Basic example">
-                        <Button variant="secondary">VSCode</Button>
-                        <Button variant="outline-secondary">Vim</Button>
+                        {modes.map(mode =>
+                            (<Button
+                                onClick={() => props.onChangeEditorMode(mode.value)}
+                                variant={`${(mode.value === props.editorMode ? "" : "outline-")}secondary`}>
+                                {mode.name}</Button>))}
                     </ButtonGroup>
                 </div>
 

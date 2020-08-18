@@ -16,7 +16,7 @@ const connectionService = new MultipleConnectionService();
 
 export default function MultipleCodeInterview(): ReactElement {
     const [language, setLanguage] = useState<string>(`JavaScript`);
-    const [editorMode, setEditorMode] = useState<string>(`VSCode`);
+    const [editorMode, setEditorMode] = useState<string>(`vscode`);
     const [name, setName] = useState<string>(`Lucian`);
     const [html, setHtml] = useState<string>(``);
     const [loading, setLoading] = useState<boolean>(true);
@@ -80,11 +80,11 @@ export default function MultipleCodeInterview(): ReactElement {
 
     const addNewMessageHandler = (from: string, message: string) => {
         setMessages([...messages,
-            {
-                message: message,
-                type: ChatMessageType.Own,
-                from: from
-            }])
+        {
+            message: message,
+            type: ChatMessageType.Own,
+            from: from
+        }])
     }
 
     const addNewMessage = (message: string) => {
@@ -97,13 +97,19 @@ export default function MultipleCodeInterview(): ReactElement {
 
     const handleSetName = (name: string) => {
         setName(name)
-        if(communicationManager) {
+        if (communicationManager) {
             communicationManager.SetName(name)
         }
     }
 
     return (<>
-        <CodingMenu name={name} onChangeName={handleSetName} language={language} onChangeLanguage={setLanguage} />
+        <CodingMenu
+            name={name}
+            onChangeName={handleSetName}
+            language={language}
+            onChangeLanguage={setLanguage}
+            editorMode={editorMode}
+            onChangeEditorMode={setEditorMode} />
 
         {!loading || (<><h1> Waiting connection ... </h1> <Spinner animation="border" /></>)}
         <div style={divStyle}>
