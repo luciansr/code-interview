@@ -1,0 +1,19 @@
+#chatWrapper {
+    min-width: 25rem;
+}
+
+@media screen and (max-width:700px){
+    #chatWrapper {
+        min-width: 10rem;
+    }
+}
+@media screen and (max-width:980px) and (min-width:700px){
+    #chatWrapper {
+        min-width: 17rem;
+    }
+}
+@media screen and (max-width:1159px) and (min-width:980px){
+    #chatWrapper {
+        min-width: 20rem;
+    }
+}

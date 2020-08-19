@@ -51,12 +51,12 @@ export default function BottomNav(props: MenuProps): ReactElement<MenuProps> {
                     target="_blank"
                     className="email"
                     href="mailto:luciansturiao@gmail.com">
-                    e-mail
+                    email
                     </a>, or <a
                     target="_blank"
                     className="github"
                     href="https://github.com/luciansr">
-                    Github</a>
+                    Github</a>. 
             </span>
 
         </Navbar>

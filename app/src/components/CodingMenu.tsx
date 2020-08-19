@@ -1,6 +1,7 @@
 import React, { ReactElement, CSSProperties } from 'react';
 
 import { Button, Navbar, Nav, Form, FormControl, NavDropdown, ButtonGroup } from 'react-bootstrap';
+import './CodingMenu.css'
 
 // import { BrowserRouter, Switch, Route, Link } from 'react-router-dom';
 
@@ -94,28 +95,30 @@ const modes: KeyValue[] = [
 
 export default function CodingMenu(props: MenuProps): ReactElement<MenuProps> {
     return (<>
-        <Navbar bg="d2ark" variant="dark" style={navStyle}>
+        <Navbar variant="dark" style={navStyle}>
             {/* <Link to="/"> */}
             <Navbar.Brand href="/">
                 <span style={brandStyle}>Coding Interview</span>
             </Navbar.Brand>
+
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
             {/* </Link> */}
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
- 
+
                 </Nav>
 
-                <div style={divStyle}>
+
+                <div style={divStyle} className="disappear-on-phones">
                     <Form inline>
                         <Form.Group controlId="exampleForm.ControlSelect1">
-                            <Form.Label>Example select</Form.Label>
                             <Form.Control as="select" value={props.language} onChange={(e) => props.onChangeLanguage(e.target.value)}>
                                 {languages.map(lang => (<option value={lang.value}>{lang.name}</option>))}
                             </Form.Control>
                         </Form.Group>
                     </Form>
                 </div>
-                <div style={divStyle}>
+                <div style={divStyle} className="disappear-on-phones disappear-on-tablets">
                     <ButtonGroup aria-label="Basic example">
                         {modes.map(mode =>
                             (<Button
@@ -125,16 +128,19 @@ export default function CodingMenu(props: MenuProps): ReactElement<MenuProps> {
                     </ButtonGroup>
                 </div>
 
-                <Form inline>
+                <div className="disappear-on-phones">
 
-                    <FormControl
-                        style={nameInput}
-                        type="text"
-                        placeholder="Your name"
-                        className="mr-sm-2"
-                        value={props.name}
-                        onChange={(e) => props.onChangeName(e.target.value)} />
-                </Form>
+                    <Form inline >
+
+                        <FormControl
+                            style={nameInput}
+                            type="text"
+                            placeholder="Your name"
+                            className="disappear-on-phones mr-sm-2"
+                            value={props.name}
+                            onChange={(e) => props.onChangeName(e.target.value)} />
+                    </Form>
+                </div>
 
             </Navbar.Collapse>
         </Navbar>

@@ -11,7 +11,7 @@
 }
 #col1 {
     background-color: yellow;
-    flex: 4 1;
+    flex: 100 1;
 
     flex-direction: column;
     display: flex;
@@ -41,4 +41,10 @@
 
 #row3 {
     background-color: pink;
+}
+
+@media screen and (max-width:700px){
+    #col2 {
+        display: none;
+    }
 }

@@ -1,6 +1,7 @@
 import React, { useState, ReactElement, useEffect, CSSProperties } from 'react'
 import { FormControl, InputGroup, Button } from 'react-bootstrap';
 import {ChatMessageData, ChatMessageType} from '../services/MultipleConnectionService'
+import './Chat.css'
 
 
 interface ChatProps {
@@ -11,10 +12,10 @@ interface ChatProps {
 const chatStyle: CSSProperties = {
     display: "flex",
     flexDirection: "column",
-    width: "100%",
+    // width: "100%",
     height: "100%",
     maxHeight: "100%",
-    minWidth: "25rem",
+    // minWidth: "25rem",
     maxWidth: "25rem",
     padding: "0.8rem 1rem",
     backgroundColor: "#151515"
@@ -33,7 +34,8 @@ const inputStyle: CSSProperties = {
 const textAreaStyle: CSSProperties = {
     resize: "none",
     alignSelf: "stretch",
-    width: "100vw",
+    flex: "10 1",
+    // width: "100vw",
     padding: "0.5rem",
     color: "white",
     backgroundColor:"#1d1f21",
@@ -69,7 +71,7 @@ export default function Chat(props: ChatProps): ReactElement<ChatProps> {
 
     return (
         <>
-            <div style={chatStyle}>
+            <div style={chatStyle} id="chatWrapper">
                 <div style={innerStyle}>
                     {props.messages.map(message => (<ChatMessageElement value={message} />))}
                 </div>
