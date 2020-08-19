@@ -1,17 +1,11 @@
 import React, { ReactElement, CSSProperties } from 'react';
 
-import { Button, Navbar, Nav, Form, FormControl, NavDropdown, ButtonGroup } from 'react-bootstrap';
+import { Navbar } from 'react-bootstrap';
 
-// import { BrowserRouter, Switch, Route, Link } from 'react-router-dom';
-
-
+import './BottomNav.css'
 const navStyle: CSSProperties = {
-    // boxSizing: "border-box",
     backgroundColor: "rgb(29 31 33 / 1)",
-    // border: "2px solid #282a2e"
-    boxShadow: "inset 0 0 0 2px #282a2e",
-    MozBoxShadow: "inset 0 0 0 2px #282a2e",
-    WebkitBoxShadow: "inset 0 0 0 2px #282a2e",
+    borderTop: "2px dotted #282a2e"
 }
 
 interface MenuProps {
@@ -31,21 +25,40 @@ const nameInput: CSSProperties = {
     fontFamily: `Menlo, Monaco, "Courier New", monospace`,
     fontStretch: `expanded`,
     fontSize: `0.8rem`,
+    marginLeft: "42px"
 }
 
-const divStyle: CSSProperties = {
-    marginRight: "1rem"
+const blockStyle: CSSProperties = {
+    width: "42px",
+    height: "100%",
+    backgroundColor: "#26282d",
+    position: "absolute",
+    left: "0"
 }
 
 export default function BottomNav(props: MenuProps): ReactElement<MenuProps> {
-
-    // const size = props.name.length > 5 ? props.name.length : 5;
-
-
-
+  
     return (<>
         <Navbar expand="lg" variant="dark" style={navStyle}>
-            <span style={nameInput}>Get in touch on </span>
+            <span style={blockStyle}></span>
+            <span style={nameInput}>
+                Get in touch on <a
+                target="_blank"
+                    className="linkedin"
+                    href="https://linkedin.com/in/luciansturiao">
+                    LinkedIn
+                    </a>, <a
+                    target="_blank"
+                    className="email"
+                    href="mailto:luciansturiao@gmail.com">
+                    e-mail
+                    </a>, or <a
+                    target="_blank"
+                    className="github"
+                    href="https://github.com/luciansr">
+                    Github</a>
+            </span>
+
         </Navbar>
     </>);
 }
