@@ -1,0 +1,17 @@
+{
+    "AWSEBDockerrunVersion": "1",
+    "Image": {
+      "Name": "908368380853.dkr.ecr.us-east-1.amazonaws.com/coding-interview/app:latest"
+    },
+    "Ports": [
+      {
+        "ContainerPort": "80"
+      }
+    ],
+    "Volumes": [
+      {
+        "HostDirectory": "/var/log",
+        "ContainerDirectory": "/var/log"
+      }
+    ]
+  }
