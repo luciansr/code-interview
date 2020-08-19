@@ -113,7 +113,7 @@ export default function CodingMenu(props: MenuProps): ReactElement<MenuProps> {
                     <Form inline>
                         <Form.Group controlId="exampleForm.ControlSelect1">
                             <Form.Control as="select" value={props.language} onChange={(e) => props.onChangeLanguage(e.target.value)}>
-                                {languages.map(lang => (<option value={lang.value}>{lang.name}</option>))}
+                                {languages.map(lang => (<option key={lang.value} value={lang.value}>{lang.name}</option>))}
                             </Form.Control>
                         </Form.Group>
                     </Form>
@@ -122,6 +122,7 @@ export default function CodingMenu(props: MenuProps): ReactElement<MenuProps> {
                     <ButtonGroup aria-label="Basic example">
                         {modes.map(mode =>
                             (<Button
+                                key={mode.value}
                                 onClick={() => props.onChangeEditorMode(mode.value)}
                                 variant={`${(mode.value === props.editorMode ? "" : "outline-")}secondary`}>
                                 {mode.name}</Button>))}

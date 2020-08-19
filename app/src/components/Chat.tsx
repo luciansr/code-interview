@@ -73,7 +73,7 @@ export default function Chat(props: ChatProps): ReactElement<ChatProps> {
         <>
             <div style={chatStyle} id="chatWrapper">
                 <div style={innerStyle}>
-                    {props.messages.map(message => (<ChatMessageElement value={message} />))}
+                    {props.messages.map(message => (<ChatMessageElement key={`${message.from}:${message.message}`} value={message} />))}
                 </div>
                 <div style={inputStyle}>
                     <InputGroup>
