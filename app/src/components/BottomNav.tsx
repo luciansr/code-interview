@@ -44,16 +44,19 @@ export default function BottomNav(props: MenuProps): ReactElement<MenuProps> {
             <span style={nameInput}>
                 Contact me on <a
                 target="_blank"
+                    rel="noopener noreferrer" 
                     className="linkedin"
                     href="https://linkedin.com/in/luciansturiao">
                     LinkedIn
                     </a>, <a
                     target="_blank"
+                    rel="noopener noreferrer" 
                     className="email"
                     href="mailto:luciansturiao@gmail.com">
                     email
                     </a>, or <a
                     target="_blank"
+                    rel="noopener noreferrer" 
                     className="github"
                     href="https://github.com/luciansr">
                     Github</a>. 

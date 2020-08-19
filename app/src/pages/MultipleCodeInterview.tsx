@@ -1,4 +1,4 @@
-import React, { ReactElement, useState, useEffect, CSSProperties } from 'react';
+import React, { ReactElement, useState, useEffect } from 'react';
 import CodeEditor from '../components/CodeEditor';
 import Chat from '../components/Chat';
 import CodingMenu from '../components/CodingMenu';
@@ -41,13 +41,6 @@ export default function MultipleCodeInterview(): ReactElement {
         if (communicationManager) {
             communicationManager.SendCodeUpdate(code)
         }
-    }
-
-    const divStyle: CSSProperties = {
-        display: "flex",
-        width: "100%",
-        height: "calc(100% - 3.5rem)",
-        maxHeight: "calc(100% - 3.5rem)",
     }
 
     const receiveChatMessage = (messages: ChatMessageData[]) => {
