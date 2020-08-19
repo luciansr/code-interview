@@ -42,7 +42,7 @@ export default function BottomNav(props: MenuProps): ReactElement<MenuProps> {
         <Navbar expand="lg" variant="dark" style={navStyle}>
             <span style={blockStyle}></span>
             <span style={nameInput}>
-                Get in touch on <a
+                Contact me on <a
                 target="_blank"
                     className="linkedin"
                     href="https://linkedin.com/in/luciansturiao">
