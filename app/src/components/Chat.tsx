@@ -1,6 +1,6 @@
-import React, { useState, ReactElement, useEffect, CSSProperties } from 'react'
-import { FormControl, InputGroup, Button } from 'react-bootstrap';
-import {ChatMessageData, ChatMessageType} from '../services/MultipleConnectionService'
+import React, { useState, ReactElement, CSSProperties } from 'react'
+import { InputGroup, Button } from 'react-bootstrap';
+import {ChatMessageData} from '../services/MultipleConnectionService'
 import './Chat.css'
 
 
@@ -12,10 +12,8 @@ interface ChatProps {
 const chatStyle: CSSProperties = {
     display: "flex",
     flexDirection: "column",
-    // width: "100%",
     height: "100%",
     maxHeight: "100%",
-    // minWidth: "25rem",
     maxWidth: "25rem",
     padding: "0.8rem 1rem",
     backgroundColor: "#151515"
@@ -59,7 +57,7 @@ export default function Chat(props: ChatProps): ReactElement<ChatProps> {
     const [message, setMessage] = useState<string>(``)
 
     const onKeyPress = (target: any) => {
-        if (target.charCode == 13) {
+        if (target.charCode === 13) {
             sendMessage()
         }
     }

@@ -1,7 +1,7 @@
-import React, { useState, ReactElement, useEffect } from 'react'
-import * as ace from 'ace-builds'
+import React, { ReactElement } from 'react'
+// import * as ace from 'ace-builds'
 
-import AceEditor, { IAceOptions } from "react-ace";
+import AceEditor from "react-ace";
 
 import "ace-builds/src-min-noconflict/mode-javascript";
 import "ace-builds/src-min-noconflict/mode-typescript";

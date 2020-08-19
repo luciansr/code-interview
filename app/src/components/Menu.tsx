@@ -1,19 +1,15 @@
 import React, { ReactElement, CSSProperties } from 'react';
 
-import { Button, Navbar, Nav, Form, FormControl,NavDropdown } from 'react-bootstrap';
+import { Navbar } from 'react-bootstrap';
 
-// import { BrowserRouter, Switch, Route, Link } from 'react-router-dom';
-
-const brandStyle: CSSProperties =  {
+const brandStyle: CSSProperties = {
     fontFamily: `Menlo, Monaco, "Courier New", monospace`,
     fontWeight: 700,
     fontSize: "1.1rem",
 }
 
-const navStyle : CSSProperties = {
-    // boxSizing: "border-box",
-    backgroundColor:"rgb(29 31 33 / 1)", 
-    // border: "2px solid #282a2e"
+const navStyle: CSSProperties = {
+    backgroundColor: "rgb(29 31 33 / 1)",
     boxShadow: "inset 0 0 0 2px #282a2e",
     MozBoxShadow: "inset 0 0 0 2px #282a2e",
     WebkitBoxShadow: "inset 0 0 0 2px #282a2e",
@@ -22,10 +18,7 @@ const navStyle : CSSProperties = {
 export default function Menu(): ReactElement {
     return (<>
         <Navbar bg="d2ark" variant="dark" style={navStyle}>
-            {/* <Link to="/"> */}
-                <Navbar.Brand href="/"><span style={brandStyle}> // Code Interview</span></Navbar.Brand>
-            {/* </Link> */}
-
+            <Navbar.Brand href="/"><span style={brandStyle}>Coding Interview</span></Navbar.Brand>
         </Navbar>
     </>);
 }

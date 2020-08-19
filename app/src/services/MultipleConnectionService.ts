@@ -1,6 +1,5 @@
 import Peer from 'peerjs';
-import { CodeClient, WorkspaceUser } from './CodeClient';
-import { debounce } from './Shared'
+import { CodeClient } from './CodeClient';
 
 const codeClient = new CodeClient();
 
@@ -33,7 +32,7 @@ export class MultipleConnectionService {
         if (myId) return myId;
 
         const newId = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+            var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
             return v.toString(16);
         });
 
@@ -49,7 +48,7 @@ export class MultipleConnectionService {
         if (myId) return myId;
 
         const newId = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+            var r = Math.random() * 16 | 0, v = c ==='x' ? r : (r & 0x3 | 0x8);
             return v.toString(16);
         });
 
@@ -164,7 +163,7 @@ class MultipleConnection {
     }
 
     public SendMessage(message: DataMessage): void {
-        if (message.type == MessageType.Code) {
+        if (message.type === MessageType.Code) {
             this.code = message.data;
         }
 

@@ -1,4 +1,4 @@
-import React, { ReactElement, useState, useEffect } from 'react';
+import React, { ReactElement } from 'react';
 import { Switch, Route, HashRouter } from 'react-router-dom';
 import MultipleCodeInterview from './pages/MultipleCodeInterview';
 import Home from './pages/Home';

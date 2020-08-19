@@ -1,7 +1,5 @@
 import React, { ReactElement, useState, useEffect, CSSProperties } from 'react';
-import { Jumbotron, Spinner } from 'react-bootstrap';
 import CodeEditor from '../components/CodeEditor';
-// import MonacoCodeEditor from '../components/MonacoCodeEditor';
 import Chat from '../components/Chat';
 import CodingMenu from '../components/CodingMenu';
 import BottomNav from '../components/BottomNav';
@@ -20,7 +18,6 @@ export default function MultipleCodeInterview(): ReactElement {
     const [editorMode, setEditorMode] = useState<string>(`vscode`);
     const [name, setName] = useState<string>(``);
     const [html, setHtml] = useState<string>(``);
-    const [loading, setLoading] = useState<boolean>(true);
     const [communicationManager, setCommunicationManager] = useState<CommunicationManager>();
     const [messages, setMessages] = useState<ChatMessageData[]>([]);
 
@@ -36,7 +33,6 @@ export default function MultipleCodeInterview(): ReactElement {
             })
 
             setCommunicationManager(communicationManager);
-            setLoading(false)
         })();
     }, [interviewId])
 
@@ -93,19 +89,7 @@ export default function MultipleCodeInterview(): ReactElement {
         setLanguage(language)
     }
 
-    const subDivStyle: CSSProperties = {
-        width: "100%",
-        height: "100%"
-    }
-
-
-    const mainDivStyle: CSSProperties = {
-        width: "100%",
-        height: "100%"
-    }
-
     return (<>
-
         <div className="wrapper">
             <div id="row1">
                 <CodingMenu
@@ -138,16 +122,5 @@ export default function MultipleCodeInterview(): ReactElement {
             <div id="row3">
             </div>
         </div>
-
-        {/* <div style={mainDivStyle}>
-            <div style={subDivStyle}>
-
-
-                <div style={divStyle}>
-                    
-                    
-                </div>
-            </div>
-        </div> */}
     </>);
 }
