@@ -93,11 +93,6 @@ const modes: KeyValue[] = [
 ]
 
 export default function CodingMenu(props: MenuProps): ReactElement<MenuProps> {
-
-    // const size = props.name.length > 5 ? props.name.length : 5;
-
-
-
     return (<>
         <Navbar bg="d2ark" variant="dark" style={navStyle}>
             {/* <Link to="/"> */}
@@ -107,15 +102,7 @@ export default function CodingMenu(props: MenuProps): ReactElement<MenuProps> {
             {/* </Link> */}
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
-                    {/* <Nav.Link href="#home">Home</Nav.Link>
-                    <Nav.Link href="#link">Link</Nav.Link>
-                    <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-                        <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                        <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
-                        <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-                        <NavDropdown.Divider />
-                        <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
-                    </NavDropdown> */}
+ 
                 </Nav>
 
                 <div style={divStyle}>

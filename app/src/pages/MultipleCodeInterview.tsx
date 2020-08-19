@@ -4,6 +4,7 @@ import CodeEditor from '../components/CodeEditor';
 // import MonacoCodeEditor from '../components/MonacoCodeEditor';
 import Chat from '../components/Chat';
 import CodingMenu from '../components/CodingMenu';
+import BottomNav from '../components/BottomNav';
 
 import { useParams } from 'react-router-dom';
 
@@ -104,8 +105,9 @@ export default function MultipleCodeInterview(): ReactElement {
     }
 
     return (<>
-        <div style={mainDivStyle}>
-            <div style={subDivStyle}>
+
+        <div className="wrapper">
+            <div id="row1">
                 <CodingMenu
                     name={name}
                     onChangeName={handleSetName}
@@ -113,12 +115,33 @@ export default function MultipleCodeInterview(): ReactElement {
                     onChangeLanguage={handleSetLanguage}
                     editorMode={editorMode}
                     onChangeEditorMode={setEditorMode} />
-
-                <div style={divStyle}>
+            </div>
+            <div id="row2">
+                <div id="col1">
                     <CodeEditor language={language} mode={editorMode} value={html} onChange={onChangeCode} />
-                    <Chat messages={messages} addTextMessage={addNewMessage} />
                 </div>
+                <div id="col2"><Chat messages={messages} addTextMessage={addNewMessage} /></div>
+            </div>
+            <div id="row3">
+                <BottomNav
+                    name={name}
+                    onChangeName={handleSetName}
+                    language={language}
+                    onChangeLanguage={handleSetLanguage}
+                    editorMode={editorMode}
+                    onChangeEditorMode={setEditorMode} />
             </div>
         </div>
+
+        {/* <div style={mainDivStyle}>
+            <div style={subDivStyle}>
+
+
+                <div style={divStyle}>
+                    
+                    
+                </div>
+            </div>
+        </div> */}
     </>);
 }
