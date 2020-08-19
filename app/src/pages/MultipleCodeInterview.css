@@ -12,12 +12,25 @@
 #col1 {
     background-color: yellow;
     flex: 4 1;
-    /* min-height: 100%;chrome needed it a question time , not anymore */
+
+    flex-direction: column;
+    display: flex;
+    min-height: 100%;/* chrome needed it a question time , not anymore */
 }
 #col2 {
     background-color: orange;
     flex: 1 1;
-    /* min-height: 100%;chrome needed it a question time , not anymore */
+    min-height: 100%;/* chrome needed it a question time , not anymore */
+}
+
+#col1-row1 {
+    background-color: green;
+    flex:100 1;
+    height: 100%;
+}
+#col1-row2 {
+    background-color: green;
+    flex:1;
 }
 
 #row2 {

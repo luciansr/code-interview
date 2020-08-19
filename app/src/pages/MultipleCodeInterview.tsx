@@ -118,11 +118,10 @@ export default function MultipleCodeInterview(): ReactElement {
             </div>
             <div id="row2">
                 <div id="col1">
-                    <CodeEditor language={language} mode={editorMode} value={html} onChange={onChangeCode} />
-                </div>
-                <div id="col2"><Chat messages={messages} addTextMessage={addNewMessage} /></div>
-            </div>
-            <div id="row3">
+                    <div id="col1-row1">
+                        <CodeEditor language={language} mode={editorMode} value={html} onChange={onChangeCode} />
+                    </div>
+                    <div id="col1-row2">
                 <BottomNav
                     name={name}
                     onChangeName={handleSetName}
@@ -130,6 +129,13 @@ export default function MultipleCodeInterview(): ReactElement {
                     onChangeLanguage={handleSetLanguage}
                     editorMode={editorMode}
                     onChangeEditorMode={setEditorMode} />
+                        
+                    </div>
+                    
+                </div>
+                <div id="col2"><Chat messages={messages} addTextMessage={addNewMessage} /></div>
+            </div>
+            <div id="row3">
             </div>
         </div>
 
