@@ -1,7 +1,7 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-alpine as build-env
 WORKDIR /app
 
-COPY ./src ./
+COPY ./ ./
 
 ARG VERSION
 RUN dotnet restore
@@ -17,4 +17,4 @@ ENV ASPNETCORE_URLS=http://*:80
 WORKDIR /app
 COPY --from=build-env /app/out .
 EXPOSE 80
-ENTRYPOINT ["dotnet", "App.dll"]
+ENTRYPOINT ["dotnet", "Api.dll"]
