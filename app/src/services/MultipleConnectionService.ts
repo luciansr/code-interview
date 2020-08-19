@@ -10,6 +10,7 @@ export class MultipleConnectionService {
     constructor() {
         this.myId = this.getMyLocalId();
         console.log(this.myId);
+        this.setUserId()
     }
 
     public getConnection(workspaceId: string, messageCallbacks: DataMessageCallbacks): CommunicationManager {
@@ -22,7 +23,7 @@ export class MultipleConnectionService {
             userId: this.getMyLocalId()
         })
 
-        return workspace.id;
+        return workspace.id; 
     }
 
     private getMyLocalId(): string {
@@ -37,6 +38,22 @@ export class MultipleConnectionService {
         });
 
         sessionStorage.setItem(key, newId);
+
+        return newId;
+    }
+
+    private setUserId() {
+        const key = `my-user-id`;
+
+        const myId = localStorage.getItem(key);
+        if (myId) return myId;
+
+        const newId = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+
+        localStorage.setItem(key, newId);
 
         return newId;
     }
@@ -161,8 +178,6 @@ class MultipleConnection {
         this.peerConnections[userConnectionId].connection.send(message);
     }
 }
-
-
 
 export interface DataMessageCallbacks {
     receiveCodeUpdate: (code: string) => void;
