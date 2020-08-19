@@ -92,20 +92,33 @@ export default function MultipleCodeInterview(): ReactElement {
         setLanguage(language)
     }
 
+    const subDivStyle: CSSProperties = {
+        width: "100%",
+        height: "100%"
+    }
+
+
+    const mainDivStyle: CSSProperties = {
+        width: "100%",
+        height: "100%"
+    }
+
     return (<>
-        <CodingMenu
-            name={name}
-            onChangeName={handleSetName}
-            language={language}
-            onChangeLanguage={handleSetLanguage}
-            editorMode={editorMode}
-            onChangeEditorMode={setEditorMode} />
+        <div style={mainDivStyle}>
+            <div style={subDivStyle}>
+                <CodingMenu
+                    name={name}
+                    onChangeName={handleSetName}
+                    language={language}
+                    onChangeLanguage={handleSetLanguage}
+                    editorMode={editorMode}
+                    onChangeEditorMode={setEditorMode} />
 
-        {!loading || (<><h1> Waiting connection ... </h1> <Spinner animation="border" /></>)}
-        <div style={divStyle}>
-            <CodeEditor language={language} mode={editorMode} value={html} onChange={onChangeCode} />
-            <Chat messages={messages} addTextMessage={addNewMessage} />
+                <div style={divStyle}>
+                    <CodeEditor language={language} mode={editorMode} value={html} onChange={onChangeCode} />
+                    <Chat messages={messages} addTextMessage={addNewMessage} />
+                </div>
+            </div>
         </div>
-
     </>);
 }
