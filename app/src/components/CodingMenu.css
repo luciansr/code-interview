@@ -1,8 +1,19 @@
+.coding-menu .language-selection {
+    margin-right: 1rem
+}
 
 @media screen and (max-width:700px){
     .disappear-on-phones{
         display: none;
     }    
+
+    .coding-menu .language-selection {
+        margin-right: 0
+    }
+
+    .coding-menu .language-selection .form-group {
+        margin: 0
+    }
 }
 @media screen and (max-width:980px) and (min-width:700px){
     .disappear-on-tablets{

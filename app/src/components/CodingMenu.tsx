@@ -96,7 +96,7 @@ const font: CSSProperties = {
 
 export default function CodingMenu(props: MenuProps): ReactElement<MenuProps> {
     return (<>
-        <Navbar variant="dark" style={navStyle}>
+        <Navbar variant="dark" style={navStyle} className="coding-menu">
             <Navbar.Brand href="/">
                 <span style={brandStyle}>Coding Interview</span>
             </Navbar.Brand>
@@ -108,7 +108,7 @@ export default function CodingMenu(props: MenuProps): ReactElement<MenuProps> {
 
                 </Nav>
 
-                <div style={divStyle} className="disappear-on-phones">
+                <div className="language-selection">
                     <Form inline>
                         <Form.Group controlId="exampleForm.ControlSelect1">
                             <Form.Control as="select" value={props.language} onChange={(e) => props.onChangeLanguage(e.target.value)}>
