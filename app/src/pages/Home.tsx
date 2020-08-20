@@ -1,13 +1,20 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, CSSProperties } from 'react';
 import { Jumbotron, Button } from 'react-bootstrap';
 import Menu from '../components/Menu';
+import BottomNav from '../components/BottomNav';
+
+import { fontFamily } from '../shared/Constants'
 
 import { useHistory } from 'react-router-dom';
 
 import { MultipleConnectionService } from '../services/MultipleConnectionService';
+import './Home.css'
+
 
 const connectionService = new MultipleConnectionService();
-
+const jumboStyle: CSSProperties = {
+    fontFamily: fontFamily
+}
 export default function Home(): ReactElement {
     let history = useHistory();
 
@@ -19,16 +26,28 @@ export default function Home(): ReactElement {
     getCodeInterviewCode()
 
     return (<>
-        <Menu/>
-        <Jumbotron>
-            <h1>Hello, world!</h1>
-            <p>
-                This is a simple hero unit, a simple jumbotron-style component for calling
-                extra attention to featured content or information.
-            </p>
-            <p>
-                <Button variant="primary" onClick={getCodeInterviewCode}>New Code Interview</Button>
-            </p>
-        </Jumbotron>
+
+
+        <div className="home-wrapper">
+            <div id="home-row1">
+                <Menu />
+            </div>
+            <div id="home-row2">
+
+                <Jumbotron>
+                    <h1>Hey, there!</h1>
+                    <p>
+                        Your are not supposed to be here
+                    </p>
+                    <p>
+                        <Button variant="dark" onClick={getCodeInterviewCode}>Create Coding Interview Room</Button>
+                    </p>
+
+                </Jumbotron>
+            </div>
+            <div id="home-row3">
+                <BottomNav emulateCode={false} />
+            </div>
+        </div>
     </>);
 }

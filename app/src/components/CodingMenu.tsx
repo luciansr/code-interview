@@ -1,10 +1,11 @@
 import React, { ReactElement, CSSProperties } from 'react';
 
+import { fontFamily } from '../shared/Constants'
 import { Button, Navbar, Nav, Form, FormControl, ButtonGroup } from 'react-bootstrap';
 import './CodingMenu.css'
 
 const brandStyle: CSSProperties = {
-    fontFamily: `Menlo, Monaco, "Courier New", monospace`,
+    fontFamily: fontFamily,
     fontWeight: 700,
     fontSize: "1.1rem",
 }
@@ -31,7 +32,7 @@ interface MenuProps {
 const nameInput: CSSProperties = {
     color: "white",
     backgroundColor: "rgb(21, 21, 21)",
-    fontFamily: `Menlo, Monaco, "Courier New", monospace`,
+    fontFamily: fontFamily,
     fontStretch: `expanded`,
     fontSize: `1rem`,
     border: "black",
@@ -89,6 +90,10 @@ const modes: KeyValue[] = [
     }
 ]
 
+const font: CSSProperties = {
+    fontFamily: fontFamily
+}
+
 export default function CodingMenu(props: MenuProps): ReactElement<MenuProps> {
     return (<>
         <Navbar variant="dark" style={navStyle}>
@@ -107,7 +112,10 @@ export default function CodingMenu(props: MenuProps): ReactElement<MenuProps> {
                     <Form inline>
                         <Form.Group controlId="exampleForm.ControlSelect1">
                             <Form.Control as="select" value={props.language} onChange={(e) => props.onChangeLanguage(e.target.value)}>
-                                {languages.map(lang => (<option key={lang.value} value={lang.value}>{lang.name}</option>))}
+                                {languages.map(lang => (<option
+                                    key={lang.value}
+                                    style={font}
+                                    value={lang.value}>{lang.name}</option>))}
                             </Form.Control>
                         </Form.Group>
                     </Form>
@@ -116,6 +124,7 @@ export default function CodingMenu(props: MenuProps): ReactElement<MenuProps> {
                     <ButtonGroup aria-label="Basic example">
                         {modes.map(mode =>
                             (<Button
+                                style={font}
                                 key={mode.value}
                                 onClick={() => props.onChangeEditorMode(mode.value)}
                                 variant={`${(mode.value === props.editorMode ? "" : "outline-")}secondary`}>

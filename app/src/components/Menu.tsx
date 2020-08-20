@@ -3,7 +3,7 @@ import React, { ReactElement, CSSProperties } from 'react';
 import { Navbar } from 'react-bootstrap';
 
 const brandStyle: CSSProperties = {
-    fontFamily: `Menlo, Monaco, "Courier New", monospace`,
+    fontFamily: `Menlo for Powerline, Monaco, "Courier New", monospace`,
     fontWeight: 700,
     fontSize: "1.1rem",
 }

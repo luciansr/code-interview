@@ -1,6 +1,7 @@
 import React, { useState, ReactElement, CSSProperties } from 'react'
 import { InputGroup, Button } from 'react-bootstrap';
 import {ChatMessageData} from '../services/MultipleConnectionService'
+import {fontFamily} from '../shared/Constants'
 import './Chat.css'
 
 
@@ -37,7 +38,7 @@ const textAreaStyle: CSSProperties = {
     padding: "0.5rem",
     color: "white",
     backgroundColor:"#1d1f21",
-    fontFamily: `Menlo, Monaco, "Courier New", monospace`,
+    fontFamily: fontFamily,
     fontSize: `0.8rem`,
     borderRadius: `0.3rem`
 }
@@ -47,7 +48,7 @@ const buttonStyle: CSSProperties = {
     right: "0.5rem",
     borderRadius: `0.3rem`,
     bottom: "0.5rem",
-    fontFamily: `Menlo, Monaco, "Courier New", monospace`,
+    fontFamily: fontFamily,
     fontSize: `0.8rem`,
     backgroundColor: "gray",
     borderColor: "gray"
@@ -86,7 +87,7 @@ export default function Chat(props: ChatProps): ReactElement<ChatProps> {
                             aria-describedby="basic-addon2"
                         />
 
-                        <Button style={buttonStyle} onClick={() => sendMessage()}>Send</Button>
+                        <Button style={buttonStyle} variant="dark"  onClick={() => sendMessage()}>Send</Button>
                     </InputGroup>
                 </div>
             </div>
@@ -100,7 +101,7 @@ interface ChatMessageProps {
 
 const messageSytle: CSSProperties = {
     margin: "0.1rem 0",
-    fontFamily: `Menlo, Monaco, "Courier New", monospace`,
+    fontFamily: fontFamily,
     color: "white",
     fontSize: `0.8rem`
 }

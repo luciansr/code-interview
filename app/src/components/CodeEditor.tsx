@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react'
+import {fontFamily} from '../shared/Constants'
 // import * as ace from 'ace-builds'
 
 import AceEditor from "react-ace";
@@ -54,7 +55,7 @@ export default function CodeEditor(props: EditorProps): ReactElement<EditorProps
                     showGutter: true,
                     fontSize: "0.9rem",
                     wrap: true,
-                    fontFamily: `Menlo, Monaco, "Courier New", monospace`,
+                    fontFamily: fontFamily,
                     enableBasicAutocompletion: true,
                     enableLiveAutocompletion: true,
                     enableSnippets: true,

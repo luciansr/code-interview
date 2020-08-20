@@ -99,16 +99,9 @@ export default function MultipleCodeInterview(): ReactElement {
                         <CodeEditor language={language} mode={editorMode} value={html} onChange={onChangeCode} />
                     </div>
                     <div id="col1-row2">
-                <BottomNav
-                    name={name}
-                    onChangeName={handleSetName}
-                    language={language}
-                    onChangeLanguage={handleSetLanguage}
-                    editorMode={editorMode}
-                    onChangeEditorMode={setEditorMode} />
-                        
+                        <BottomNav emulateCode={true} />
                     </div>
-                    
+
                 </div>
                 <div id="col2"><Chat messages={messages} addTextMessage={addNewMessage} /></div>
             </div>

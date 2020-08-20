@@ -1,0 +1,30 @@
+.home-wrapper, html, body {
+    height: 100%;
+    margin: 0;
+}
+.home-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+#home-row1 {
+    /* background-color: red; */
+}
+
+#home-row2 {
+    flex: 1000 1;
+
+    display: flex;
+    justify-content: center;
+
+    align-content: center;
+    flex-direction: column;
+}
+
+.home-wrapper  .jumbotron {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    /* justify-items: ; */
+}

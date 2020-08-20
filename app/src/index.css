@@ -6,8 +6,17 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+/* 
+@font-face {
+  font-family: 'Menlo for Powerline';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Menlo for Powerline'), url('./fonts/Menlo for Powerline.ttf') format('ttf');
+  }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
+  @font-face {
+    font-family: 'Roboto Mono';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Roboto Mono'), url('./fonts/RobotoMono.ttf') format('ttf');
+    } */
