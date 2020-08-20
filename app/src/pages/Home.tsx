@@ -3,8 +3,6 @@ import { Jumbotron, Button } from 'react-bootstrap';
 import Menu from '../components/Menu';
 import BottomNav from '../components/BottomNav';
 
-import { fontFamily } from '../shared/Constants'
-
 import { useHistory } from 'react-router-dom';
 
 import { MultipleConnectionService } from '../services/MultipleConnectionService';
@@ -12,8 +10,8 @@ import './Home.css'
 
 
 const connectionService = new MultipleConnectionService();
-const jumboStyle: CSSProperties = {
-    fontFamily: fontFamily
+const colorBlack: CSSProperties = {
+    color: "black"
 }
 export default function Home(): ReactElement {
     let history = useHistory();
@@ -35,8 +33,8 @@ export default function Home(): ReactElement {
             <div id="home-row2">
 
                 <Jumbotron>
-                    <h1>Hey, there!</h1>
-                    <p>
+                    <h1 style={colorBlack}>It's gonna be Legen... wait for it!</h1>
+                    <p style={colorBlack}>
                         Your are not supposed to be here
                     </p>
                     <p>
