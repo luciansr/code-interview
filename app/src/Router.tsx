@@ -12,7 +12,7 @@ export default function Router(): ReactElement {
           <Route exact path="/">
             <Home />
           </Route>
-          <Route path="/mc/:interviewId">
+          <Route path="/m/:interviewMode/:interviewId">
             <MultipleCodeInterview />
           </Route>
         </Switch>

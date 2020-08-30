@@ -14,11 +14,11 @@ const colorBlack: CSSProperties = {
     color: "black"
 }
 export default function Home(): ReactElement {
-    let history = useHistory();
+    const history = useHistory();
 
     const getCodeInterviewCode = async () => {
         const code = await connectionService.getNewInterviewCode();
-        history.push(`/mc/${code}`);
+        history.push(`/m/c/${code}`);
     }
 
     getCodeInterviewCode()

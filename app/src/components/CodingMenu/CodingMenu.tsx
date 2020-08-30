@@ -104,7 +104,7 @@ const interviewModes: KeyValue<InterviewMode>[] = [
         value: InterviewMode.Coding
     },
     {
-        name: "White board",
+        name: "Black board",
         value: InterviewMode.WhiteBoard
     }
 ]

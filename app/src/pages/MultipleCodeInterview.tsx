@@ -5,7 +5,7 @@ import Chat from '../components/Chat/Chat';
 import CodingMenu, { InterviewMode } from '../components/CodingMenu/CodingMenu';
 import BottomNav from '../components/BottomNav/BottomNav';
 
-import { useParams } from 'react-router-dom';
+import { Switch, Route, useParams, useHistory } from 'react-router-dom';
 
 import { MultipleConnectionService, CommunicationManager, ChatMessageData, ChatMessageType } from '../services/MultipleConnectionService';
 
@@ -22,8 +22,12 @@ export default function MultipleCodeInterview(): ReactElement {
     const [communicationManager, setCommunicationManager] = useState<CommunicationManager>();
     const [messages, setMessages] = useState<ChatMessageData[]>([]);
     const [interviewMode, setInterviewMode] = useState<InterviewMode>(InterviewMode.Coding);
+    const history = useHistory();
 
     const { interviewId } = useParams();
+
+    const goToCodeInterviewMode = () => history.push(`/m/c/${interviewId}`);
+    const goToBoardInterviewMode = () => history.push(`/m/b/${interviewId}`);
 
     useEffect(() => {
         (async () => {
@@ -84,12 +88,25 @@ export default function MultipleCodeInterview(): ReactElement {
         setLanguage(language)
     }
 
+    const handleChangeInterviewMode = (interviewMode: InterviewMode) => {
+        switch(interviewMode) {
+            case InterviewMode.Coding:
+                goToCodeInterviewMode();
+                break;
+            case InterviewMode.WhiteBoard:
+                goToBoardInterviewMode();
+                break;
+        }
+
+        setInterviewMode(interviewMode);
+    }
+
     return (<>
         <div className="wrapper">
             <div id="row1">
                 <CodingMenu
                     interviewMode={interviewMode}
-                    onChangeInterviewMode={setInterviewMode}
+                    onChangeInterviewMode={handleChangeInterviewMode}
                     name={name}
                     onChangeName={handleSetName}
                     language={language}
@@ -100,15 +117,21 @@ export default function MultipleCodeInterview(): ReactElement {
             <div id="row2">
                 <div id="col1">
                     <div id="col1-row1">
-                        {interviewMode == InterviewMode.Coding ? (<>
-                            <CodeEditor language={language} mode={editorMode} value={html} onChange={onChangeCode} />
-                        </>) : (<>
-                            <WhiteBoard />
-                        </>)}
+                        <Switch>
+                            <Route path="/m/c/:interviewId">
+
+                                <CodeEditor language={language} mode={editorMode} value={html} onChange={onChangeCode} />
+                            </Route>
+                            <Route path="/m/b/:interviewId">
+
+                                <WhiteBoard />
+                            </Route>
+
+                        </Switch>
 
                     </div>
                     <div id="col1-row2">
-                        <BottomNav emulateCode={true} />
+                        <BottomNav emulateCode={interviewMode == InterviewMode.Coding} />
                     </div>
 
                 </div>
