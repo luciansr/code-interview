@@ -1,6 +1,6 @@
 import React, { ReactElement, useState, useEffect } from 'react';
 import CodeEditor from '../components/CodeEditor/CodeEditor';
-import WhiteBoard from '../components/WhiteBoard/WhiteBoard';
+import WhiteBoard, {CanvasState} from '../components/WhiteBoard/WhiteBoard';
 import Chat from '../components/Chat/Chat';
 import CodingMenu, { InterviewMode } from '../components/CodingMenu/CodingMenu';
 import BottomNav from '../components/BottomNav/BottomNav';
@@ -19,7 +19,10 @@ export default function MultipleCodeInterview(): ReactElement {
     const [language, setLanguage] = useState<string>(`typescript`);
     const [editorMode, setEditorMode] = useState<string>(`vscode`);
     const [name, setName] = useState<string>(``);
-    const [html, setHtml] = useState<string>(``);
+    const [code, setCode] = useState<string>(``);
+
+    const [canvasState, setCanvasState] = useState<CanvasState>();
+
     const [communicationManager, setCommunicationManager] = useState<CommunicationManager>();
     const [messages, setMessages] = useState<ChatMessageData[]>([]);
     const [interviewMode, setInterviewMode] = useState<InterviewMode>(
@@ -36,7 +39,7 @@ export default function MultipleCodeInterview(): ReactElement {
     useEffect(() => {
         (async () => {
             const communicationManager = await connectionService.getConnection(interviewId, {
-                receiveCodeUpdate: setHtml,
+                receiveCodeUpdate: setCode,
                 receiveChatMessage: receiveChatMessage,
                 receiveNameUpdate: receiveNameUpdate,
                 receiveLanguageUpdate: setLanguage
@@ -47,7 +50,7 @@ export default function MultipleCodeInterview(): ReactElement {
     }, [interviewId])
 
     const onChangeCode = (code: string) => {
-        setHtml(code);
+        setCode(code);
         if (communicationManager) {
             communicationManager.SendCodeUpdate(code)
         }
@@ -124,11 +127,11 @@ export default function MultipleCodeInterview(): ReactElement {
                         <Switch>
                             <Route path="/m/c/:interviewId">
 
-                                <CodeEditor language={language} mode={editorMode} value={html} onChange={onChangeCode} />
+                                <CodeEditor language={language} mode={editorMode} value={code} onChange={onChangeCode} />
                             </Route>
                             <Route path="/m/b/:interviewId">
 
-                                <WhiteBoard />
+                                <WhiteBoard value={canvasState} onChange={setCanvasState} />
                             </Route>
 
                         </Switch>

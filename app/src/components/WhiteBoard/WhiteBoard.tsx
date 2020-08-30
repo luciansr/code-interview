@@ -1,11 +1,12 @@
-import React, { ReactElement, useState, CSSProperties } from 'react'
+import React, { ReactElement, useState, CSSProperties, useEffect } from 'react'
 import { fontFamily } from '../../shared/Constants'
 
 import CanvasDraw from "react-canvas-draw";
 
 
 interface Props {
-
+    value: CanvasState | undefined,
+    onChange: (value: CanvasState) => void
 }
 
 export interface CanvasState {
@@ -35,17 +36,32 @@ const saveButton: CSSProperties = {
 }
 
 export default function WhiteBoard(props: Props): ReactElement<Props> {
-    const [canvas, setCanvas] = useState<CanvasDraw>()
+    const [canvasRef, setCanvasRef] = useState<CanvasDraw>()
+    const [enableUpdate, setEnableUpdate] = useState<boolean>(false)
+
+
+    // useEffect(() => {
+        
+    //     setTimeout(() => {
+    //         if(props.value && canvasRef) {
+    //             canvasRef?.loadSaveData(JSON.stringify(props.value), true)
+    //         }
+    //     //     setEnableUpdate(true)
+    //     }, 100)
+    // }, [canvasRef])
 
     const onClear = () => {
-        canvas?.clear()
+        canvasRef?.clear()
 
     }
 
     const onSave = () => {
-        var canvasHistory = canvas?.getSaveData()
-        debugger;
+        var canvasHistory = canvasRef?.getSaveData()
+        // debugger;
         console.log(canvasHistory)
+        // canvas?.
+        console.log(canvasRef?.state)
+        // canvas?.loadSaveData(canvasHistory)
     }
 
     return (
@@ -60,8 +76,14 @@ export default function WhiteBoard(props: Props): ReactElement<Props> {
                     backgroundColor={`rgb(29, 31, 33)`}
                     lazyRadius={3}
                     brushRadius={2}
-                    ref={(canvas: CanvasDraw) => setCanvas(canvas)}
-                    onChange={(canvas: CanvasDraw) => console.log(canvas)}
+                    ref={(canvas: CanvasDraw) => {
+                        setCanvasRef(canvas); 
+                        if(props.value && canvas && !enableUpdate){
+                            setEnableUpdate(true)
+                            canvas.loadSaveData(JSON.stringify(props.value), false)
+                        }                        
+                    }}
+                    onChange={(canvas: CanvasDraw) => props.onChange(JSON.parse(canvas.getSaveData()))}
                     brushColor={`lightpink`}
                     canvasHeight={`100%`}
                     canvasWidth={`100%`}
