@@ -1,7 +1,7 @@
 import React, { ReactElement, CSSProperties } from 'react';
 import { Jumbotron, Button } from 'react-bootstrap';
-import Menu from '../components/Menu';
-import BottomNav from '../components/BottomNav';
+import Menu from '../components/Menu/Menu';
+import BottomNav from '../components/BottomNav/BottomNav';
 
 import { useHistory } from 'react-router-dom';
 

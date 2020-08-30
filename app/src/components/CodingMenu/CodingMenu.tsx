@@ -1,6 +1,6 @@
 import React, { ReactElement, CSSProperties } from 'react';
 
-import { fontFamily } from '../shared/Constants'
+import { fontFamily } from '../../shared/Constants'
 import { Button, Navbar, Nav, Form, FormControl, ButtonGroup } from 'react-bootstrap';
 import './CodingMenu.css'
 
@@ -17,7 +17,15 @@ const navStyle: CSSProperties = {
     WebkitBoxShadow: "inset 0 0 0 2px #282a2e",
 }
 
+export enum InterviewMode {
+    Coding,
+    WhiteBoard
+}
+
 interface MenuProps {
+    interviewMode: InterviewMode
+    onChangeInterviewMode: (interviewMode: InterviewMode) => void
+
     language: string
     onChangeLanguage: (language: string) => void
 
@@ -43,12 +51,12 @@ const divStyle: CSSProperties = {
     marginRight: "1rem"
 }
 
-interface KeyValue {
+interface KeyValue<TType> {
     name: string
-    value: string
+    value: TType
 }
 
-const languages: KeyValue[] = [
+const languages: KeyValue<string>[] = [
     {
         name: "TypeScript",
         value: "typescript"
@@ -79,7 +87,7 @@ const languages: KeyValue[] = [
     }
 ]
 
-const modes: KeyValue[] = [
+const modes: KeyValue<string>[] = [
     {
         name: "VSCode",
         value: "vscode"
@@ -87,6 +95,17 @@ const modes: KeyValue[] = [
     {
         name: "Vim",
         value: "vim"
+    }
+]
+
+const interviewModes: KeyValue<InterviewMode>[] = [
+    {
+        name: "Coding",
+        value: InterviewMode.Coding
+    },
+    {
+        name: "White board",
+        value: InterviewMode.WhiteBoard
     }
 ]
 
@@ -119,6 +138,17 @@ export default function CodingMenu(props: MenuProps): ReactElement<MenuProps> {
                             </Form.Control>
                         </Form.Group>
                     </Form>
+                </div>
+                <div style={divStyle} className="disappear-on-phones">
+                    <ButtonGroup aria-label="Basic example">
+                        {interviewModes.map(mode =>
+                            (<Button
+                                style={font}
+                                key={mode.value}
+                                onClick={() => props.onChangeInterviewMode(mode.value)}
+                                variant={`${(mode.value === props.interviewMode ? "" : "outline-")}secondary`}>
+                                {mode.name}</Button>))}
+                    </ButtonGroup>
                 </div>
                 <div style={divStyle} className="disappear-on-phones disappear-on-tablets">
                     <ButtonGroup aria-label="Basic example">

@@ -1,5 +1,5 @@
 import React, { ReactElement, CSSProperties } from 'react';
-import { fontFamily } from '../shared/Constants'
+import { fontFamily } from '../../shared/Constants'
 
 import { Navbar } from 'react-bootstrap';
 

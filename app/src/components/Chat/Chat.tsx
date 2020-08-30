@@ -1,7 +1,7 @@
 import React, { useState, ReactElement, CSSProperties } from 'react'
 import { InputGroup, Button } from 'react-bootstrap';
-import {ChatMessageData} from '../services/MultipleConnectionService'
-import {fontFamily} from '../shared/Constants'
+import {ChatMessageData} from '../../services/MultipleConnectionService'
+import {fontFamily} from '../../shared/Constants'
 import './Chat.css'
 
 

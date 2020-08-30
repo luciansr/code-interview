@@ -1,8 +1,9 @@
 import React, { ReactElement, useState, useEffect } from 'react';
-import CodeEditor from '../components/CodeEditor';
-import Chat from '../components/Chat';
-import CodingMenu from '../components/CodingMenu';
-import BottomNav from '../components/BottomNav';
+import CodeEditor from '../components/CodeEditor/CodeEditor';
+import WhiteBoard from '../components/WhiteBoard/WhiteBoard';
+import Chat from '../components/Chat/Chat';
+import CodingMenu, { InterviewMode } from '../components/CodingMenu/CodingMenu';
+import BottomNav from '../components/BottomNav/BottomNav';
 
 import { useParams } from 'react-router-dom';
 
@@ -20,6 +21,7 @@ export default function MultipleCodeInterview(): ReactElement {
     const [html, setHtml] = useState<string>(``);
     const [communicationManager, setCommunicationManager] = useState<CommunicationManager>();
     const [messages, setMessages] = useState<ChatMessageData[]>([]);
+    const [interviewMode, setInterviewMode] = useState<InterviewMode>(InterviewMode.Coding);
 
     const { interviewId } = useParams();
 
@@ -86,6 +88,8 @@ export default function MultipleCodeInterview(): ReactElement {
         <div className="wrapper">
             <div id="row1">
                 <CodingMenu
+                    interviewMode={interviewMode}
+                    onChangeInterviewMode={setInterviewMode}
                     name={name}
                     onChangeName={handleSetName}
                     language={language}
@@ -96,7 +100,12 @@ export default function MultipleCodeInterview(): ReactElement {
             <div id="row2">
                 <div id="col1">
                     <div id="col1-row1">
-                        <CodeEditor language={language} mode={editorMode} value={html} onChange={onChangeCode} />
+                        {interviewMode == InterviewMode.Coding ? (<>
+                            <CodeEditor language={language} mode={editorMode} value={html} onChange={onChangeCode} />
+                        </>) : (<>
+                            <WhiteBoard />
+                        </>)}
+
                     </div>
                     <div id="col1-row2">
                         <BottomNav emulateCode={true} />
