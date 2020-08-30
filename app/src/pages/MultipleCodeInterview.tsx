@@ -13,18 +13,22 @@ import './MultipleCodeInterview.css'
 
 const connectionService = new MultipleConnectionService();
 
-
 export default function MultipleCodeInterview(): ReactElement {
+    const { interviewId, interviewModeParam } = useParams();
+
     const [language, setLanguage] = useState<string>(`typescript`);
     const [editorMode, setEditorMode] = useState<string>(`vscode`);
     const [name, setName] = useState<string>(``);
     const [html, setHtml] = useState<string>(``);
     const [communicationManager, setCommunicationManager] = useState<CommunicationManager>();
     const [messages, setMessages] = useState<ChatMessageData[]>([]);
-    const [interviewMode, setInterviewMode] = useState<InterviewMode>(InterviewMode.Coding);
+    const [interviewMode, setInterviewMode] = useState<InterviewMode>(
+        interviewModeParam === `c`? 
+        InterviewMode.Coding: 
+        InterviewMode.WhiteBoard);
+
     const history = useHistory();
 
-    const { interviewId } = useParams();
 
     const goToCodeInterviewMode = () => history.push(`/m/c/${interviewId}`);
     const goToBoardInterviewMode = () => history.push(`/m/b/${interviewId}`);
