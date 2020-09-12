@@ -13,14 +13,6 @@ interface MenuProps {
     emulateCode: boolean
 }
 
-const nameInput: CSSProperties = {
-    color: "#858585",
-    fontFamily: fontFamily,
-    fontStretch: `expanded`,
-    fontSize: `0.8rem`,
-    marginLeft: "42px"
-}
-
 const blockStyle: CSSProperties = {
     width: "42px",
     height: "100%",

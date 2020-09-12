@@ -1,16 +1,23 @@
-import React, { ReactElement } from 'react'
+import React, { ReactElement, useEffect } from 'react'
 import {fontFamily} from '../shared/Constants'
-// import * as ace from 'ace-builds'
+// import * as ace from 'ace-builds/src-noconflict/ace'
 
 import AceEditor from "react-ace";
-
+// import brace from 'brace';
 import "ace-builds/src-min-noconflict/mode-javascript";
+import "ace-builds/src-min-noconflict/snippets/javascript";
 import "ace-builds/src-min-noconflict/mode-typescript";
+// import "ace-builds/src-min-noconflict/snippets/typescript";
 import "ace-builds/src-min-noconflict/mode-java";
+// import "ace-builds/src-min-noconflict/snippets/java";
 import "ace-builds/src-min-noconflict/mode-python";
+// import "ace-builds/src-min-noconflict/snippets/python";
 import "ace-builds/src-min-noconflict/mode-c_cpp";
+// import "ace-builds/src-min-noconflict/snippets/c_cpp";
 import "ace-builds/src-min-noconflict/mode-csharp";
+// import "ace-builds/src-min-noconflict/snippets/csharp";
 import "ace-builds/src-min-noconflict/mode-golang";
+// import "ace-builds/src-min-noconflict/snippets/golang";
 
 
 import 'ace-builds/src-min-noconflict/keybinding-vscode';
@@ -28,6 +35,10 @@ interface EditorProps {
 }
 
 export default function CodeEditor(props: EditorProps): ReactElement<EditorProps> {
+    useEffect(() => {
+        // ace.
+    },[])
+
     return (
         <>
             <AceEditor
@@ -42,7 +53,7 @@ export default function CodeEditor(props: EditorProps): ReactElement<EditorProps
                 enableSnippets={true}
                 // debounceChangePeriod={600}
                 keyboardHandler={props.mode.toLowerCase()}
-                onValidate={(data) => console.log(data)}
+                // onValidate={(data) => console.log(data)}
                 setOptions={{
                     showInvisibles: true,
                     useWorker: false,
@@ -59,7 +70,6 @@ export default function CodeEditor(props: EditorProps): ReactElement<EditorProps
                     enableBasicAutocompletion: true,
                     enableLiveAutocompletion: true,
                     enableSnippets: true,
-
                 }}
                 width={"100%"}
                 height={"100%"}
@@ -69,7 +79,7 @@ export default function CodeEditor(props: EditorProps): ReactElement<EditorProps
                     $blockScrolling: true,
                     $highlightPending: true,
                     $highlightTagPending: true,
-
+                    
                 }}
             />
         </>
