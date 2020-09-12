@@ -68,6 +68,13 @@ interface ConnectionDictionary {
     [id: string]: ConnectionState
 }
 
+export enum MessageType {
+    RequestUpdate,
+    Code,
+    Chat,
+    UpdateLanguage,
+}
+
 class MultipleConnection {
     private peer: Peer;
     private peerConnections: ConnectionDictionary = {};
@@ -185,13 +192,6 @@ export interface DataMessageCallbacks {
     receiveLanguageUpdate: (language: string) => void;
 }
 
-export enum MessageType {
-    RequestUpdate,
-    Code,
-    Chat,
-    UpdateLanguage,
-}
-
 export interface DataMessage {
     type: MessageType;
     data: any;
@@ -262,10 +262,10 @@ export class CommunicationManager {
     }
 
     public SendChatMessage(from: string, message: string): void {
-        const newMessage = <ChatMessageData>{
+        const newMessage = {
             from: from,
             message: message
-        }
+        } as ChatMessageData
 
         this.addChatMessage(newMessage);
 

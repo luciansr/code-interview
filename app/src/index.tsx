@@ -3,8 +3,19 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import Router from './Router';
 import * as serviceWorker from './serviceWorker';
+import * as Sentry from '@sentry/react';
+import { Integrations } from '@sentry/tracing';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+
+Sentry.init({
+    dsn: "https://5545a9f3e22f4324aa1ebb961da44441@o441612.ingest.sentry.io/5412026",
+    integrations: [
+      new Integrations.BrowserTracing(),
+    ],
+    tracesSampleRate: 1.0,
+  });
+  
 
 ReactDOM.render(<Router />, document.getElementById('root'));
 
