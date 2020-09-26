@@ -203,6 +203,20 @@ export interface ChatMessageData {
     type: ChatMessageType
 }
 
+export interface UserCursorData {
+    user: string
+    cursor: CursorPositionData
+}
+
+export interface CursorPositionData {
+    anchor: CursorPosition
+    lead: CursorPosition
+}
+
+export interface CursorPosition {
+    row: number
+    column: number
+}
 
 export enum ChatMessageType {
     Own,
@@ -247,6 +261,15 @@ export class CommunicationManager {
             data: code,
             type: MessageType.Code
         })
+    }
+
+    public SendCursorUpdate(cursor: CursorPositionData): void {
+        console.log(cursor)
+        // this.code = code;
+        // this.connection.SendMessage({
+        //     data: code,
+        //     type: MessageType.Code
+        // })
     }
 
     public SendLanguageUpdate(language: string): void {
