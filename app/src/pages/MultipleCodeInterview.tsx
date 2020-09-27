@@ -3,6 +3,7 @@ import CodeEditor from '../components/CodeEditor/CodeEditor';
 import Chat from '../components/Chat';
 import CodingMenu from '../components/CodingMenu';
 import BottomNav from '../components/BottomNav';
+import ReactGA from 'react-ga';
 
 import { useParams } from 'react-router-dom';
 
@@ -34,6 +35,7 @@ export default function MultipleCodeInterview(): ReactElement {
             })
 
             setCommunicationManager(communicationManager);
+            ReactGA.pageview(`/multiple-code-interview`);
         })();
     }, [interviewId])
 
@@ -42,6 +44,19 @@ export default function MultipleCodeInterview(): ReactElement {
         if (communicationManager) {
             communicationManager.SendCodeUpdate(code)
         }
+        ReactGA.event({
+            category: 'Interaction',
+            action: 'Update code'
+          })
+    }
+
+    const onChangeEditorMode = (editorMode: string) => {
+        setEditorMode(editorMode)
+        ReactGA.event({
+            category: 'Interaction',
+            action: 'Change editor mode',
+            label: editorMode
+          })
     }
 
     const onChangeCursor = (cursor: CursorPositionData) => {
@@ -77,6 +92,11 @@ export default function MultipleCodeInterview(): ReactElement {
         if (communicationManager) {
             communicationManager.SendChatMessage(name, message)
         }
+        ReactGA.event({
+            category: 'Interaction',
+            action: 'Send chat message',
+            label: message
+          })
     }
 
     const handleSetName = (name: string) => {
@@ -84,6 +104,11 @@ export default function MultipleCodeInterview(): ReactElement {
         if (communicationManager) {
             communicationManager.SetName(name)
         }
+        ReactGA.event({
+            category: 'Interaction',
+            action: `Changed name`,
+            label: name
+          })
     }
 
     const handleSetLanguage = (language: string) => {
@@ -91,6 +116,11 @@ export default function MultipleCodeInterview(): ReactElement {
             communicationManager.SendLanguageUpdate(language)
         }
         setLanguage(language)
+        ReactGA.event({
+            category: 'Interaction',
+            action: `Changed Language`,
+            label: language
+          })
     }
 
     return (<>
@@ -102,7 +132,7 @@ export default function MultipleCodeInterview(): ReactElement {
                     language={language}
                     onChangeLanguage={handleSetLanguage}
                     editorMode={editorMode}
-                    onChangeEditorMode={setEditorMode} />
+                    onChangeEditorMode={onChangeEditorMode} />
             </div>
             <div id="row2">
                 <div id="col1">

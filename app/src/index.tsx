@@ -5,8 +5,16 @@ import Router from './Router';
 import * as serviceWorker from './serviceWorker';
 import * as Sentry from '@sentry/react';
 import { Integrations } from '@sentry/tracing';
+import ReactGA from 'react-ga';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+
+
+ReactGA.initialize('UA-42276885-4', {
+  gaOptions: {
+    userId: localStorage.getItem('my-user-id') || undefined
+  }
+});
 
 Sentry.init({
     dsn: "https://5545a9f3e22f4324aa1ebb961da44441@o441612.ingest.sentry.io/5412026",
