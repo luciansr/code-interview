@@ -1,0 +1,19 @@
+div.cursor-marker {
+    position: absolute; 
+    border-radius: 0;
+    border-left: 2px solid #0f0;
+    animation: blinker 1s linear infinite;
+    z-index: 10;
+}
+
+div.cursor-line {
+    background-color: #3b3b3b;
+    position: absolute; 
+    border-radius: 0;
+}
+
+@keyframes blinker {
+    50% {
+      opacity: 0;
+    }
+  }

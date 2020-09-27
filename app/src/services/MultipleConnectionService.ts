@@ -22,7 +22,7 @@ export class MultipleConnectionService {
             userId: this.getMyLocalId()
         })
 
-        return workspace.id; 
+        return workspace.id;
     }
 
     private getMyLocalId(): string {
@@ -48,7 +48,7 @@ export class MultipleConnectionService {
         if (myId) return myId;
 
         const newId = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-            var r = Math.random() * 16 | 0, v = c ==='x' ? r : (r & 0x3 | 0x8);
+            var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
             return v.toString(16);
         });
 
@@ -73,13 +73,13 @@ export enum MessageType {
     Code,
     Chat,
     UpdateLanguage,
+    UpdateCursor,
 }
 
 class MultipleConnection {
     private peer: Peer;
     private peerConnections: ConnectionDictionary = {};
     private codeClient: CodeClient;
-    private code: string = ``;
 
     constructor(
         private localId: string,
@@ -170,10 +170,6 @@ class MultipleConnection {
     }
 
     public SendMessage(message: DataMessage): void {
-        if (message.type === MessageType.Code) {
-            this.code = message.data;
-        }
-
         for (var id in this.peerConnections) {
             const peerConnection = this.peerConnections[id].connection;
             peerConnection.send(message);
@@ -190,6 +186,7 @@ export interface DataMessageCallbacks {
     receiveChatMessage: (messages: ChatMessageData[]) => void;
     receiveNameUpdate: (name: string) => void;
     receiveLanguageUpdate: (language: string) => void;
+    receiveCursorData: (cursors: UserCursorData[]) => void;
 }
 
 export interface DataMessage {
@@ -203,12 +200,40 @@ export interface ChatMessageData {
     type: ChatMessageType
 }
 
+export interface UserCursorData {
+    user: string
+    cursor: CursorPositionData
+}
+
+export interface CursorPositionData {
+    anchor: CursorPosition
+    lead: CursorPosition
+}
+
+export interface CursorPosition {
+    row: number
+    column: number
+}
 
 export enum ChatMessageType {
     Own,
     Others
 }
 
+interface UserCursorDictionary {
+    [user: string]: UserCursorData
+}
+
+const debounce = (self: any, func: (...args: any) => void, wait: any) => {
+    var timeout : any;
+    return (...args: any) => {
+        clearTimeout(timeout);
+        timeout = setTimeout(function() {
+            timeout = null;
+            func.apply(self, args);
+        }, wait);
+    };
+}
 export class CommunicationManager {
 
     private myConnectionId?: string
@@ -216,8 +241,11 @@ export class CommunicationManager {
     private language: string = ``
     private name: string = ``
     private chatMessages: ChatMessageData[] = []
+    private userCursors: UserCursorDictionary = {}
     private alreadyRequestedInitialState: boolean = false
     private connection: MultipleConnection
+    private myCursor: UserCursorData | null = null;
+    private cleanCursorTimeout: NodeJS.Timeout | null = null;
 
     constructor(
         private localId: string,
@@ -247,6 +275,47 @@ export class CommunicationManager {
             data: code,
             type: MessageType.Code
         })
+    }
+
+    private cursorHasChanged(userCursor: UserCursorData) {
+        return this.myCursor === null
+            || userCursor.cursor.lead.column > 0
+            && this.myCursor.cursor.lead.column !== userCursor.cursor.lead.column
+            || userCursor.cursor.lead.row > 0 && this.myCursor.cursor.lead.row !== userCursor.cursor.lead.row
+    }
+
+    private _sendCursorUpdate = debounce(this, (cursor: CursorPositionData) => {
+        const userCursor = {
+            user: this.name,
+            cursor: cursor
+        } as UserCursorData
+
+        if (this.cursorHasChanged(userCursor)) {
+            this.myCursor = userCursor;
+
+            this.connection.SendMessage({
+                data: userCursor,
+                type: MessageType.UpdateCursor
+            })
+        }
+    }, 0)
+
+
+    public SendCursorUpdate(cursor: CursorPositionData): void {
+        // this._sendCursorUpdate(cursor)
+        const userCursor = {
+            user: this.name,
+            cursor: cursor
+        } as UserCursorData
+
+        if (this.cursorHasChanged(userCursor)) {
+            this.myCursor = userCursor;
+
+            this.connection.SendMessage({
+                data: userCursor,
+                type: MessageType.UpdateCursor
+            })
+        }
     }
 
     public SendLanguageUpdate(language: string): void {
@@ -283,7 +352,8 @@ export class CommunicationManager {
         console.log(`Service: connected with id ${myConnectionId}`)
         this.myConnectionId = myConnectionId;
         if (this.name === ``) {
-            this.messageCallbacks.receiveNameUpdate(`User ${myConnectionId}`)
+            this.messageCallbacks.receiveNameUpdate(`User ${myConnectionId}`);
+            this.name = `User ${myConnectionId}`;
         }
     }
 
@@ -302,6 +372,33 @@ export class CommunicationManager {
         })
     }
 
+    private createCleanCursorFunction() {
+        this.cleanCursorTimeout = setTimeout(() => {
+            this.userCursors = {}
+            this.messageCallbacks.receiveCursorData([])
+        }, 2500);
+    }
+
+    private deleteCleanCursorFunction() {
+        if (this.cleanCursorTimeout !== null) {
+            clearTimeout(this.cleanCursorTimeout)
+            this.cleanCursorTimeout = null;
+        }
+    }
+
+    private ReceiveCursor(userCursor: UserCursorData) {
+        this.deleteCleanCursorFunction();
+        this.userCursors[userCursor.user] = userCursor;
+        let cursors: UserCursorData[] = [];
+
+        for (const user in this.userCursors) {
+            cursors.push(this.userCursors[user]);
+        }
+
+        this.messageCallbacks.receiveCursorData(cursors);
+        this.createCleanCursorFunction();
+    }
+
     private ReceiveMessage(message: DataMessage) {
         switch (message.type) {
             case MessageType.Code:
@@ -318,6 +415,9 @@ export class CommunicationManager {
             case MessageType.UpdateLanguage:
                 this.language = message.data;
                 this.messageCallbacks.receiveLanguageUpdate(message.data)
+                break;
+            case MessageType.UpdateCursor:
+                this.ReceiveCursor(message.data);
                 break;
         }
     }
