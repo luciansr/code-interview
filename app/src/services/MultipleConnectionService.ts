@@ -224,8 +224,16 @@ interface UserCursorDictionary {
     [user: string]: UserCursorData
 }
 
-
-
+const debounce = (self: any, func: (...args: any) => void, wait: any) => {
+    var timeout : any;
+    return (...args: any) => {
+        clearTimeout(timeout);
+        timeout = setTimeout(function() {
+            timeout = null;
+            func.apply(self, args);
+        }, wait);
+    };
+}
 export class CommunicationManager {
 
     private myConnectionId?: string
@@ -261,18 +269,6 @@ export class CommunicationManager {
         })
     }
 
-    private debounce(func: (cursor: CursorPositionData) => void, wait: any) {
-        var timeout : any;
-        return (cursor: CursorPositionData) => {
-            var context = this as any;
-            clearTimeout(timeout);
-            timeout = setTimeout(function() {
-                timeout = null;
-                func.apply(context, [cursor]);
-            }, wait);
-        };
-    }
-
     public SendCodeUpdate(code: string): void {
         this.code = code;
         this.connection.SendMessage({
@@ -283,16 +279,12 @@ export class CommunicationManager {
 
     private cursorHasChanged(userCursor: UserCursorData) {
         return this.myCursor === null
-            // || this.myCursor.cursor.anchor.column !== userCursor.cursor.anchor.column
-            // || this.myCursor.cursor.anchor.row !== userCursor.cursor.anchor.row
             || userCursor.cursor.lead.column > 0
             && this.myCursor.cursor.lead.column !== userCursor.cursor.lead.column
-            // && (this.myCursor.cursor.lead.column - userCursor.cursor.lead.column > 0
-                // || this.myCursor.cursor.lead.column - userCursor.cursor.lead.column < -3)
             || userCursor.cursor.lead.row > 0 && this.myCursor.cursor.lead.row !== userCursor.cursor.lead.row
     }
 
-    private _sendCursorUpdate = this.debounce((cursor: CursorPositionData) => {
+    private _sendCursorUpdate = debounce(this, (cursor: CursorPositionData) => {
         const userCursor = {
             user: this.name,
             cursor: cursor
@@ -306,24 +298,24 @@ export class CommunicationManager {
                 type: MessageType.UpdateCursor
             })
         }
-    }, 100)
+    }, 0)
 
 
     public SendCursorUpdate(cursor: CursorPositionData): void {
-        this._sendCursorUpdate(cursor)
-        // const userCursor = {
-        //     user: this.name,
-        //     cursor: cursor
-        // } as UserCursorData
+        // this._sendCursorUpdate(cursor)
+        const userCursor = {
+            user: this.name,
+            cursor: cursor
+        } as UserCursorData
 
-        // if (this.cursorHasChanged(userCursor)) {
-        //     this.myCursor = userCursor;
+        if (this.cursorHasChanged(userCursor)) {
+            this.myCursor = userCursor;
 
-        //     this.connection.SendMessage({
-        //         data: userCursor,
-        //         type: MessageType.UpdateCursor
-        //     })
-        // }
+            this.connection.SendMessage({
+                data: userCursor,
+                type: MessageType.UpdateCursor
+            })
+        }
     }
 
     public SendLanguageUpdate(language: string): void {
@@ -384,7 +376,7 @@ export class CommunicationManager {
         this.cleanCursorTimeout = setTimeout(() => {
             this.userCursors = {}
             this.messageCallbacks.receiveCursorData([])
-        }, 5000);
+        }, 2500);
     }
 
     private deleteCleanCursorFunction() {
@@ -397,15 +389,13 @@ export class CommunicationManager {
     private ReceiveCursor(userCursor: UserCursorData) {
         this.deleteCleanCursorFunction();
         this.userCursors[userCursor.user] = userCursor;
-        let cursors: UserCursorData[] = []
+        let cursors: UserCursorData[] = [];
 
         for (const user in this.userCursors) {
-            cursors.push(this.userCursors[user])
+            cursors.push(this.userCursors[user]);
         }
 
         this.messageCallbacks.receiveCursorData(cursors);
-        // this.messageCallbacks.receiveCursorData([userCursor]);
-
         this.createCleanCursorFunction();
     }
 

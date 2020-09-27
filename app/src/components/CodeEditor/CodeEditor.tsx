@@ -39,6 +39,17 @@ interface EditorProps {
     onCursorChange: (value: CursorPositionData) => void
 }
 
+const debounce = (self: any, func: (...args: any) => void, wait: any) => {
+    var timeout : any;
+    return (...args: any) => {
+        clearTimeout(timeout);
+        timeout = setTimeout(function() {
+            timeout = null;
+            func.apply(self, args);
+        }, wait);
+    };
+}
+
 export default function CodeEditor(props: EditorProps): ReactElement<EditorProps> {
     const { cursors } = props;
     
@@ -65,7 +76,6 @@ export default function CodeEditor(props: EditorProps): ReactElement<EditorProps
     }))
 
     const onCursorChange = (selection: any) => {
-        // console.log(selection)
         const cursor: CursorPosition = selection.getCursor()
         props.onCursorChange({
             anchor: {
@@ -78,6 +88,8 @@ export default function CodeEditor(props: EditorProps): ReactElement<EditorProps
             }
         })
     }
+
+    const debouncedOnCursorChange = debounce(null, onCursorChange, 100);
 
     return (
         <>
@@ -113,8 +125,7 @@ export default function CodeEditor(props: EditorProps): ReactElement<EditorProps
                 width={"100%"}
                 height={"100%"}
                 onChange={props.onChange}
-                onCursorChange={onCursorChange}
-                // onSelectionChange={onCursorChange}
+                onCursorChange={debouncedOnCursorChange}
                 name="code-editor"
                 editorProps={{
                     $blockScrolling: true,
