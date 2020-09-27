@@ -19,21 +19,7 @@ export default function MultipleCodeInterview(): ReactElement {
     const [html, setHtml] = useState<string>(``);
     const [communicationManager, setCommunicationManager] = useState<CommunicationManager>();
     const [messages, setMessages] = useState<ChatMessageData[]>([]);
-    const [cursors, setCursors] = useState<UserCursorData[]>(
-        [{
-            user: ``,
-            cursor: {
-                anchor: {
-                    column: 2,
-                    row: 3
-                },
-                lead: {
-                    column: 1,
-                    row: 0
-                }
-            }
-        }]
-    );
+    const [cursors, setCursors] = useState<UserCursorData[]>([]);
 
     const { interviewId } = useParams<{ interviewId: string }>();
 
