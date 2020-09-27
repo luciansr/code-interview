@@ -1,6 +1,6 @@
 import React, { ReactElement /* , useEffect */ } from 'react'
 import { fontFamily } from '../../shared/Constants'
-import { CursorPositionData } from '../../services/MultipleConnectionService'
+import { CursorPositionData, UserCursorData } from '../../services/MultipleConnectionService'
 // import * as ace from 'ace-builds/src-noconflict/ace'
 
 import AceEditor, { IMarker } from "react-ace";
@@ -34,20 +34,20 @@ interface EditorProps {
     language: string
     mode: string
     value: string
-    cursors: CursorPositionData[]
+    cursors: UserCursorData[]
     onChange: (value: string) => void
     onCursorChange: (value: CursorPositionData) => void
 }
 
 export default function CodeEditor(props: EditorProps): ReactElement<EditorProps> {
     const { cursors } = props;
-
+    
     const cursorMarkers: IMarker[] = cursors.map(cursor => {
         return {
-            startRow: cursor.lead.row,
-            startCol: cursor.lead.column,
-            endRow: cursor.lead.row,
-            endCol: cursor.lead.column + 1,
+            startRow: cursor.cursor.lead.row,
+            startCol: cursor.cursor.lead.column,
+            endRow: cursor.cursor.lead.row,
+            endCol: cursor.cursor.lead.column + 1,
             type: "text",
             className: "cursor-marker"
         }
@@ -55,9 +55,9 @@ export default function CodeEditor(props: EditorProps): ReactElement<EditorProps
 
     const cursorMarkersAndLines: IMarker[] = cursorMarkers.concat(cursors.map(cursor => {
         return {
-            startRow: cursor.lead.row,
+            startRow: cursor.cursor.lead.row,
             startCol: 0,
-            endRow: cursor.lead.row,
+            endRow: cursor.cursor.lead.row,
             endCol: 1,
             type: "fullLine",
             className: "cursor-line"
@@ -111,7 +111,8 @@ export default function CodeEditor(props: EditorProps): ReactElement<EditorProps
                 width={"100%"}
                 height={"100%"}
                 onChange={props.onChange}
-                onSelectionChange={onCursorChange}
+                onCursorChange={onCursorChange}
+                // onSelectionChange={onCursorChange}
                 name="code-editor"
                 editorProps={{
                     $blockScrolling: true,

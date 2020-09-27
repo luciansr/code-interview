@@ -1,5 +1,4 @@
 div.cursor-marker {
-    /* background-color: pink; */
     position: absolute; 
     border-radius: 0;
     border-left: 2px solid #0f0;
@@ -8,7 +7,7 @@ div.cursor-marker {
 }
 
 div.cursor-line {
-    background-color: #360134;
+    background-color: #3b3b3b;
     position: absolute; 
     border-radius: 0;
 }

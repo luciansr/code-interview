@@ -6,7 +6,7 @@ import BottomNav from '../components/BottomNav';
 
 import { useParams } from 'react-router-dom';
 
-import { MultipleConnectionService, CommunicationManager, ChatMessageData, ChatMessageType, CursorPositionData } from '../services/MultipleConnectionService';
+import { MultipleConnectionService, CommunicationManager, ChatMessageData, ChatMessageType, CursorPositionData, UserCursorData } from '../services/MultipleConnectionService';
 
 import './MultipleCodeInterview.css'
 
@@ -19,6 +19,21 @@ export default function MultipleCodeInterview(): ReactElement {
     const [html, setHtml] = useState<string>(``);
     const [communicationManager, setCommunicationManager] = useState<CommunicationManager>();
     const [messages, setMessages] = useState<ChatMessageData[]>([]);
+    const [cursors, setCursors] = useState<UserCursorData[]>(
+        [{
+            user: ``,
+            cursor: {
+                anchor: {
+                    column: 2,
+                    row: 3
+                },
+                lead: {
+                    column: 1,
+                    row: 0
+                }
+            }
+        }]
+    );
 
     const { interviewId } = useParams<{ interviewId: string }>();
 
@@ -28,7 +43,8 @@ export default function MultipleCodeInterview(): ReactElement {
                 receiveCodeUpdate: setHtml,
                 receiveChatMessage: receiveChatMessage,
                 receiveNameUpdate: receiveNameUpdate,
-                receiveLanguageUpdate: setLanguage
+                receiveLanguageUpdate: setLanguage,
+                receiveCursorData: receiveCursorData
             })
 
             setCommunicationManager(communicationManager);
@@ -43,7 +59,6 @@ export default function MultipleCodeInterview(): ReactElement {
     }
 
     const onChangeCursor = (cursor: CursorPositionData) => {
-        // setHtml(code);
         if (communicationManager) {
             communicationManager.SendCursorUpdate(cursor)
         }
@@ -51,6 +66,10 @@ export default function MultipleCodeInterview(): ReactElement {
 
     const receiveChatMessage = (messages: ChatMessageData[]) => {
         setMessages(messages)
+    }
+
+    const receiveCursorData = (cursors: UserCursorData[]) => {
+        setCursors(cursors)
     }
 
     const receiveNameUpdate = (name: string) => {
@@ -106,16 +125,7 @@ export default function MultipleCodeInterview(): ReactElement {
                             language={language}
                             mode={editorMode}
                             value={html}
-                            cursors={[{
-                                anchor: {
-                                    column: 2,
-                                    row: 3
-                                },
-                                lead: {
-                                    column: 1,
-                                    row: 0
-                                }
-                            }]}
+                            cursors={cursors}
                             onChange={onChangeCode}
                             onCursorChange={onChangeCursor}
                         />
