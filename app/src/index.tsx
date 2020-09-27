@@ -12,6 +12,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 ReactGA.initialize('UA-42276885-4', {
   gaOptions: {
+    sampleRate: 100,
+    siteSpeedSampleRate: 100,
     userId: localStorage.getItem('my-user-id') || undefined
   }
 });
@@ -22,6 +24,7 @@ Sentry.init({
       new Integrations.BrowserTracing(),
     ],
     tracesSampleRate: 1.0,
+    environment: window.location.host,
   });
   
 
