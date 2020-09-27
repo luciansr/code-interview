@@ -1,6 +1,6 @@
 import React, { ReactElement /* , useEffect */ } from 'react'
 import { fontFamily } from '../../shared/Constants'
-import { CursorPositionData, UserCursorData } from '../../services/MultipleConnectionService'
+import { CursorPosition, CursorPositionData, UserCursorData } from '../../services/MultipleConnectionService'
 // import * as ace from 'ace-builds/src-noconflict/ace'
 
 import AceEditor, { IMarker } from "react-ace";
@@ -64,15 +64,17 @@ export default function CodeEditor(props: EditorProps): ReactElement<EditorProps
         }
     }))
 
-    const onCursorChange = (selection: CursorPositionData) => {
+    const onCursorChange = (selection: any) => {
+        // console.log(selection)
+        const cursor: CursorPosition = selection.getCursor()
         props.onCursorChange({
             anchor: {
-                column: selection.anchor.column,
-                row: selection.anchor.row
+                column: 0,
+                row: 0
             },
             lead: {
-                column: selection.lead.column,
-                row: selection.lead.row
+                column: cursor.column,
+                row: cursor.row
             }
         })
     }

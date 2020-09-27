@@ -224,6 +224,8 @@ interface UserCursorDictionary {
     [user: string]: UserCursorData
 }
 
+
+
 export class CommunicationManager {
 
     private myConnectionId?: string
@@ -259,6 +261,18 @@ export class CommunicationManager {
         })
     }
 
+    private debounce(func: (cursor: CursorPositionData) => void, wait: any) {
+        var timeout : any;
+        return (cursor: CursorPositionData) => {
+            var context = this as any;
+            clearTimeout(timeout);
+            timeout = setTimeout(function() {
+                timeout = null;
+                func.apply(context, [cursor]);
+            }, wait);
+        };
+    }
+
     public SendCodeUpdate(code: string): void {
         this.code = code;
         this.connection.SendMessage({
@@ -271,12 +285,14 @@ export class CommunicationManager {
         return this.myCursor === null
             // || this.myCursor.cursor.anchor.column !== userCursor.cursor.anchor.column
             // || this.myCursor.cursor.anchor.row !== userCursor.cursor.anchor.row
-            || userCursor.cursor.lead.column > 0 && this.myCursor.cursor.lead.column !== userCursor.cursor.lead.column
+            || userCursor.cursor.lead.column > 0
+            && this.myCursor.cursor.lead.column !== userCursor.cursor.lead.column
+            // && (this.myCursor.cursor.lead.column - userCursor.cursor.lead.column > 0
+                // || this.myCursor.cursor.lead.column - userCursor.cursor.lead.column < -3)
             || userCursor.cursor.lead.row > 0 && this.myCursor.cursor.lead.row !== userCursor.cursor.lead.row
     }
 
-    public SendCursorUpdate(cursor: CursorPositionData): void {
-
+    private _sendCursorUpdate = this.debounce((cursor: CursorPositionData) => {
         const userCursor = {
             user: this.name,
             cursor: cursor
@@ -290,6 +306,24 @@ export class CommunicationManager {
                 type: MessageType.UpdateCursor
             })
         }
+    }, 100)
+
+
+    public SendCursorUpdate(cursor: CursorPositionData): void {
+        this._sendCursorUpdate(cursor)
+        // const userCursor = {
+        //     user: this.name,
+        //     cursor: cursor
+        // } as UserCursorData
+
+        // if (this.cursorHasChanged(userCursor)) {
+        //     this.myCursor = userCursor;
+
+        //     this.connection.SendMessage({
+        //         data: userCursor,
+        //         type: MessageType.UpdateCursor
+        //     })
+        // }
     }
 
     public SendLanguageUpdate(language: string): void {
