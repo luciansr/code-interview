@@ -1,5 +1,6 @@
 import Peer from 'peerjs';
 import { CodeClient } from './CodeClient';
+const peerHost = process.env.REACT_APP_PEERJS
 
 const codeClient = new CodeClient();
 
@@ -88,7 +89,15 @@ class MultipleConnection {
         private onConnectCallback: (myConnectionId: string) => void,
         private onConnectWithUserCallback: (userConnectionId: string) => void) {
         this.codeClient = new CodeClient();
-        this.peer = new Peer();
+        if(peerHost === "None") {
+            this.peer = new Peer();
+        } else {
+            this.peer = new Peer(undefined, {
+                host: peerHost,
+                port: 9000,
+                path: `/api`,
+            });
+        }
         this.InitializePeer()
     }
 
