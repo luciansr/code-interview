@@ -94,7 +94,7 @@ class MultipleConnection {
         } else {
             this.peer = new Peer(undefined, {
                 host: peerHost,
-                port: 9000,
+                port: 80,
                 path: `/api`,
             });
         }
