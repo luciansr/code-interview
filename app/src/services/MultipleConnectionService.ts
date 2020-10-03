@@ -1,7 +1,8 @@
 import Peer from 'peerjs';
 import { CodeClient } from './CodeClient';
 const peerHost = process.env.REACT_APP_PEERJS
-const peerPort = Number(process.env.REACT_APP_PEERJS_PORT ?? `9000`)
+const peerPort = Number(process.env.REACT_APP_PEERJS_PORT ?? `443`)
+const peerRoute = process.env.REACT_APP_PEERJS_ROUTE ?? `/`
 
 const codeClient = new CodeClient();
 
@@ -98,7 +99,7 @@ class MultipleConnection {
             this.peer = new Peer(undefined, {
                 host: peerHost,
                 port: peerPort,
-                path: `/api`,
+                path: peerRoute,
             });
         }
         this.InitializePeer()
@@ -123,7 +124,9 @@ class MultipleConnection {
             // Workaround for peer.reconnect deleting previous id
             // peer.id = lastPeerId;
             // peer._lastServerId = lastPeerId;
-            this.peer.reconnect();
+            setTimeout(() => {
+                this.peer.reconnect();
+            }, 2000)
         });
         this.peer.on('close', function () {
             // conn = null;
