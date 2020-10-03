@@ -1,6 +1,7 @@
 import Peer from 'peerjs';
 import { CodeClient } from './CodeClient';
 const peerHost = process.env.REACT_APP_PEERJS
+const peerPort = Number(process.env.REACT_APP_PEERJS_PORT ?? `9000`)
 
 const codeClient = new CodeClient();
 
@@ -14,7 +15,7 @@ export class MultipleConnectionService {
     }
 
     public getConnection(workspaceId: string, messageCallbacks: DataMessageCallbacks): CommunicationManager {
-        return new CommunicationManager(this.getMyLocalId(), workspaceId, messageCallbacks)
+        return new CommunicationManager(this.getMyLocalId(), workspaceId, this.newGuid(), messageCallbacks)
     }
 
     public async getNewInterviewCode(): Promise<string> {
@@ -32,14 +33,18 @@ export class MultipleConnectionService {
         const myId = sessionStorage.getItem(key);
         if (myId) return myId;
 
-        const newId = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-            var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
-            return v.toString(16);
-        });
+        const newId = this.newGuid();
 
         sessionStorage.setItem(key, newId);
 
         return newId;
+    }
+
+    private newGuid() : string {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
     }
 
     private setUserId() {
@@ -48,10 +53,7 @@ export class MultipleConnectionService {
         const myId = localStorage.getItem(key);
         if (myId) return myId;
 
-        const newId = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-            var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
-            return v.toString(16);
-        });
+        const newId = this.newGuid();
 
         localStorage.setItem(key, newId);
 
@@ -85,6 +87,7 @@ class MultipleConnection {
     constructor(
         private localId: string,
         private workspaceId: string,
+        private newId: string,
         private receiveMessageCallback: (message: DataMessage) => void,
         private onConnectCallback: (myConnectionId: string) => void,
         private onConnectWithUserCallback: (userConnectionId: string) => void) {
@@ -94,7 +97,7 @@ class MultipleConnection {
         } else {
             this.peer = new Peer(undefined, {
                 host: peerHost,
-                port: 80,
+                port: peerPort,
                 path: `/api`,
             });
         }
@@ -259,8 +262,9 @@ export class CommunicationManager {
     constructor(
         private localId: string,
         private workspaceId: string,
+        private newId: string,
         private messageCallbacks: DataMessageCallbacks) {
-        this.connection = new MultipleConnection(localId, workspaceId,
+        this.connection = new MultipleConnection(localId, workspaceId, newId,
             (message: DataMessage) => this.ReceiveMessage(message),
             (myConnectionId: string) => this.OnConnect(myConnectionId),
             (userConnectionId: string) => this.OnConnectToUser(userConnectionId))
