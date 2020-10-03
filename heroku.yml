@@ -1,5 +1,0 @@
-build:
-  docker:
-    web: peerjs/Dockerfile
-run:
-  web: peerjs --port 9000 --key peerjs --path /api
