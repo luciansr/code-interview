@@ -4,6 +4,8 @@ WORKDIR /app
 COPY ./ ./
 
 ARG VERSION
+# RUN apt install node
+RUN uname -a
 RUN dotnet restore
 RUN dotnet test ./Tests
 

@@ -1,5 +1,8 @@
 import Peer from 'peerjs';
 import { CodeClient } from './CodeClient';
+const peerHost = process.env.REACT_APP_PEERJS
+const peerPort = Number(process.env.REACT_APP_PEERJS_PORT ?? `443`)
+const peerRoute = process.env.REACT_APP_PEERJS_ROUTE ?? `/`
 
 const codeClient = new CodeClient();
 
@@ -13,7 +16,7 @@ export class MultipleConnectionService {
     }
 
     public getConnection(workspaceId: string, messageCallbacks: DataMessageCallbacks): CommunicationManager {
-        return new CommunicationManager(this.getMyLocalId(), workspaceId, messageCallbacks)
+        return new CommunicationManager(this.getMyLocalId(), workspaceId, this.newGuid(), messageCallbacks)
     }
 
     public async getNewInterviewCode(): Promise<string> {
@@ -31,14 +34,18 @@ export class MultipleConnectionService {
         const myId = sessionStorage.getItem(key);
         if (myId) return myId;
 
-        const newId = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-            var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
-            return v.toString(16);
-        });
+        const newId = this.newGuid();
 
         sessionStorage.setItem(key, newId);
 
         return newId;
+    }
+
+    private newGuid() : string {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
     }
 
     private setUserId() {
@@ -47,10 +54,7 @@ export class MultipleConnectionService {
         const myId = localStorage.getItem(key);
         if (myId) return myId;
 
-        const newId = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-            var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
-            return v.toString(16);
-        });
+        const newId = this.newGuid();
 
         localStorage.setItem(key, newId);
 
@@ -84,11 +88,20 @@ class MultipleConnection {
     constructor(
         private localId: string,
         private workspaceId: string,
+        private newId: string,
         private receiveMessageCallback: (message: DataMessage) => void,
         private onConnectCallback: (myConnectionId: string) => void,
         private onConnectWithUserCallback: (userConnectionId: string) => void) {
         this.codeClient = new CodeClient();
-        this.peer = new Peer();
+        if(peerHost === "None") {
+            this.peer = new Peer();
+        } else {
+            this.peer = new Peer(undefined, {
+                host: peerHost,
+                port: peerPort,
+                path: peerRoute,
+            });
+        }
         this.InitializePeer()
     }
 
@@ -111,7 +124,9 @@ class MultipleConnection {
             // Workaround for peer.reconnect deleting previous id
             // peer.id = lastPeerId;
             // peer._lastServerId = lastPeerId;
-            this.peer.reconnect();
+            setTimeout(() => {
+                this.peer.reconnect();
+            }, 2000)
         });
         this.peer.on('close', function () {
             // conn = null;
@@ -250,8 +265,9 @@ export class CommunicationManager {
     constructor(
         private localId: string,
         private workspaceId: string,
+        private newId: string,
         private messageCallbacks: DataMessageCallbacks) {
-        this.connection = new MultipleConnection(localId, workspaceId,
+        this.connection = new MultipleConnection(localId, workspaceId, newId,
             (message: DataMessage) => this.ReceiveMessage(message),
             (myConnectionId: string) => this.OnConnect(myConnectionId),
             (userConnectionId: string) => this.OnConnectToUser(userConnectionId))
