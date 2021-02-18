@@ -76,6 +76,10 @@ const languages: KeyValue[] = [
     {
         name: "Golang",
         value: "golang"
+    },
+    {
+        name: "Ruby",
+        value: "ruby"
     }
 ]
 
