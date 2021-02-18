@@ -17,7 +17,7 @@ import "ace-builds/src-min-noconflict/mode-c_cpp";
 // import "ace-builds/src-min-noconflict/snippets/c_cpp";
 import "ace-builds/src-min-noconflict/mode-csharp";
 // import "ace-builds/src-min-noconflict/snippets/csharp";
-import "ace-builds/src-min-noconflict/mode-golang";
+import "ace-builds/src-min-noconflict/mode-ruby";
 // import "ace-builds/src-min-noconflict/snippets/golang";
 
 
